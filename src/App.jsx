@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
 import CalendarView from "./components/CalendarView";
 import Footer from "./components/Footer";
@@ -15,6 +15,10 @@ function App() {
     return true;
   });
 
+  // Calendar fullscreen mode (hides header/footer)
+  const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
+  const calendarContainerRef = useRef(null);
+
   // Toggle dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -29,27 +33,77 @@ function App() {
     }
   }, [darkMode]);
 
+  // Handle calendar fullscreen toggle
+  const toggleCalendarFullscreen = async () => {
+    if (!calendarOnlyMode) {
+      // Enter fullscreen - hide header/footer
+      setCalendarOnlyMode(true);
+      try {
+        if (calendarContainerRef.current) {
+          await calendarContainerRef.current.requestFullscreen();
+        }
+      } catch (err) {
+        console.log("Fullscreen API not supported, using fallback");
+      }
+    } else {
+      // Exit fullscreen - show header/footer
+      setCalendarOnlyMode(false);
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        }
+      } catch (err) {
+        console.log("Fullscreen API error");
+      }
+    }
+  };
+
+  // Listen for fullscreen change events (user presses ESC)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        setCalendarOnlyMode(false);
+      }
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
+      className={`min-h-screen transition-colors duration-300 ${
+        darkMode ? "dark bg-gray-900" : "bg-gray-50"
+      }`}
     >
-      <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      {/* Header - Hidden in calendar only mode */}
+      {!calendarOnlyMode && <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
 
       <main className="transition-colors duration-300">
-        {/* Calendar Section */}
-        <section id="holidays" className="py-4">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Calendar Section - Fullscreen capable */}
+        <section
+          id="holidays"
+          ref={calendarContainerRef}
+          className={`${calendarOnlyMode ? "h-screen overflow-auto p-4" : "py-4"}`}
+        >
+          <div
+            className={`${
+              calendarOnlyMode ? "h-full max-w-full" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+            }`}
+          >
             <CalendarView
               holidays={holidays}
               categories={categories}
               states={states}
               darkMode={darkMode}
+              calendarOnlyMode={calendarOnlyMode}
+              toggleCalendarFullscreen={toggleCalendarFullscreen}
             />
           </div>
         </section>
       </main>
 
-      <Footer darkMode={darkMode} />
+      {/* Footer - Hidden in calendar only mode */}
+      {!calendarOnlyMode && <Footer darkMode={darkMode} />}
     </div>
   );
 }

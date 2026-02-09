@@ -24,11 +24,15 @@ const MONTHS_ID = [
   "Desember",
 ];
 
-export default function CalendarView({ holidays, darkMode }) {
+export default function CalendarView({ 
+  holidays, 
+  darkMode, 
+  calendarOnlyMode = false, 
+  toggleCalendarFullscreen 
+}) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState("year");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const [year] = useState(2026);
 
   // Get current date info
@@ -77,14 +81,10 @@ export default function CalendarView({ holidays, darkMode }) {
     };
   }, [holidays]);
 
-  // Toggle fullscreen
-  const toggleFullScreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullScreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullScreen(false);
+  // Toggle fullscreen - uses the prop from parent
+  const handleFullscreenToggle = () => {
+    if (toggleCalendarFullscreen) {
+      toggleCalendarFullscreen();
     }
   };
 
@@ -192,20 +192,20 @@ export default function CalendarView({ holidays, darkMode }) {
 
           {/* Fullscreen Button */}
           <button
-            onClick={toggleFullScreen}
+            onClick={handleFullscreenToggle}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${
               darkMode
                 ? "text-gray-300 hover:bg-gray-700 border-gray-600"
                 : "text-gray-600 hover:bg-gray-100 border-gray-200"
             }`}
           >
-            {isFullScreen ? (
+            {calendarOnlyMode ? (
               <Minimize2 className="w-4 h-4" />
             ) : (
               <Maximize2 className="w-4 h-4" />
             )}
             <span className="hidden sm:inline">
-              {isFullScreen ? "Keluar" : "Layar Penuh"}
+              {calendarOnlyMode ? "Keluar" : "Layar Penuh"}
             </span>
           </button>
         </div>

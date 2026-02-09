@@ -135,7 +135,7 @@ export default function CalendarView({ holidays, darkMode }) {
               { id: "year", icon: LayoutGrid, label: "Tahun" },
               { id: "month", icon: CalendarIcon, label: "Bulan" },
               { id: "list", icon: List, label: "Daftar" },
-            ].map(({ id, icon: any, label }) => (
+            ].map(({ id, icon: Icon, label }) => (
               <button
                 key={id}
                 onClick={() => setViewMode(id)}

@@ -2,14 +2,14 @@
 
 Aplikasi kalender interaktif untuk melihat hari libur nasional dan cuti bersama Indonesia tahun 2026 berdasarkan SKB 3 Menteri.
 
-![Cuti Kuy Logo](/cuti-kuy-logo.png)
+![Cuti Kuy Logo](/public/screenshoot-web-app.png)
 
 ## ✨ Features
 
 - 📅 **3 View Modes**: Tahun (Year), Bulan (Month), Daftar (List)
 - 🌙 **Dark/Light Mode**: Smooth transition between themes
 - 🔍 **Filter**: Libur Nasional, Cuti Bersama, atau Semua
-- 🎨 **Color Coded**: 
+- 🎨 **Color Coded**:
   - 🔴 Merah = Libur Nasional
   - 🟠 Kuning = Cuti Bersama
   - 🔵 Biru = Hari Ini
@@ -18,7 +18,7 @@ Aplikasi kalender interaktif untuk melihat hari libur nasional dan cuti bersama 
 
 ## 🚀 Live Demo
 
-[https://cuti-kuy.netlify.app](https://cuti-kuy.netlify.app) *(Coming soon)*
+[https://cuti-kuy.netlify.app](https://cuti-kuy.netlify.app) _(Coming soon)_
 
 ## 🛠️ Tech Stack
 
@@ -51,6 +51,7 @@ npm run build
 #### Method A: Git-based Deployment (Automatic)
 
 1. **Push to GitHub:**
+
    ```bash
    # Create new repository on GitHub first, then:
    git remote add origin https://github.com/YOUR_USERNAME/cuti-kuy.git
@@ -74,6 +75,7 @@ npm run build
 #### Method B: Drag & Drop (Manual)
 
 1. Build the project:
+
    ```bash
    npm run build
    ```
@@ -137,6 +139,7 @@ cuti-kuy/
 ## 📝 Data Source
 
 Hari libur nasional Indonesia 2026 berdasarkan:
+
 - SKB 3 Menteri (Kemenag, Kemenaker, Kemendikbud)
 - Tanggal dapat berubah berdasarkan penetapan pemerintah
 

@@ -3,8 +3,10 @@ import { Moon, Sun, Heart } from "lucide-react";
 export default function Header({ darkMode, toggleDarkMode }) {
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-colors duration-300 ${
-        darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+      className={`sticky top-0 z-50 border-b backdrop-blur-md backdrop-saturate-150 transition-all duration-300 ${
+        darkMode
+          ? "bg-gray-900/60 border-gray-700"
+          : "bg-white/60 border-gray-200"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

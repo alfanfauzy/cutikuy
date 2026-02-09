@@ -9,9 +9,10 @@ function App() {
   // Dark mode state - check system preference
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const saved = localStorage.getItem("theme");
+      if (saved) return saved === "dark";
     }
-    return false;
+    return true;
   });
 
   // Toggle dark mode

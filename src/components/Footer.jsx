@@ -18,9 +18,7 @@ export default function Footer({ darkMode }) {
                 Based on SKB Menteri
               </a>
             </u>{" "}
-            © {currentYear} Cuti Kuy. Dibuat dengan{" "}
-            <Heart className="w-3 h-3 inline fill-red-500 text-red-500" /> untuk
-            Indonesia.
+            © {currentYear} - Cuti Kuy.
           </p>
         </div>
       </div>

@@ -90,17 +90,28 @@ export default function CalendarView({ holidays, darkMode }) {
 
   // Filter buttons config
   const filterButtons = [
-    { id: "all", label: "Semua", color: "bg-gray-500", count: stats.total },
+    {
+      id: "all",
+      label: "Semua",
+      color: "bg-green-500",
+      bg: "bg-green-100",
+      border: "border-green-500",
+      count: stats.total,
+    },
     {
       id: "public",
       label: "Libur Nasional",
       color: "bg-red-500",
+      bg: "bg-red-100",
+      border: "border-red-500",
       count: stats.public,
     },
     {
       id: "joint",
       label: "Cuti Bersama",
       color: "bg-amber-500",
+      bg: "bg-amber-100",
+      border: "border-amber-500",
       count: stats.joint,
     },
   ];
@@ -124,7 +135,7 @@ export default function CalendarView({ holidays, darkMode }) {
               { id: "year", icon: LayoutGrid, label: "Tahun" },
               { id: "month", icon: CalendarIcon, label: "Bulan" },
               { id: "list", icon: List, label: "Daftar" },
-            ].map(({ id, icon: Icon, label }) => (
+            ].map(({ id, icon: any, label }) => (
               <button
                 key={id}
                 onClick={() => setViewMode(id)}
@@ -153,11 +164,11 @@ export default function CalendarView({ holidays, darkMode }) {
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                   selectedCategory === btn.id
                     ? darkMode
-                      ? "bg-gray-300 text-gray-800 shadow-sm"
-                      : "bg-gray-300 text-gray-500 shadow-sm"
+                      ? `${btn.bg} text-gray-800 shadow-sm ${btn.border}`
+                      : `${btn.bg} text-gray-500 shadow-sm border ${btn.border}`
                     : darkMode
-                      ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? `bg-gray-100 text-gray-400`
+                      : `bg-white text-gray-700 border border-gray-400`
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${btn.color}`} />
@@ -166,11 +177,11 @@ export default function CalendarView({ holidays, darkMode }) {
                   className={`text-xs px-1.5 py-0.5 rounded transition-colors duration-300 ${
                     selectedCategory === btn.id
                       ? darkMode
-                        ? "bg-gray-500 text-gray-200"
-                        : `bg-white text-gray-600`
+                        ? `${btn.color} text-white`
+                        : `${btn.color} text-white`
                       : darkMode
-                        ? "bg-gray-300 text-slate-500"
-                        : "bg-gray-500  text-gray-200"
+                        ? `${btn.color} text-white`
+                        : `${btn.color}  text-white`
                   }`}
                 >
                   {btn.count}

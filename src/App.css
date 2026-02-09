@@ -1,0 +1,278 @@
+/* Indonesia Holidays Theme - Google Calendar Style with Dark Mode */
+
+/* Smooth transition for all color-related properties */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transition for performance-critical elements */
+.no-transition,
+.no-transition *,
+.no-transition *::before,
+.no-transition *::after {
+  transition: none !important;
+}
+
+/* Hero gradient - Indonesia red theme */
+.hero-gradient {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #991b1b 100%);
+}
+
+/* Table styles (kept for compatibility) */
+.table-header {
+  @apply bg-red-600 text-white;
+}
+
+.holiday-row:hover {
+  @apply bg-red-50;
+}
+
+.dark .holiday-row:hover {
+  @apply bg-red-900/20;
+}
+
+/* Filter buttons */
+.filter-btn {
+  @apply px-4 py-2 rounded-lg;
+}
+
+.filter-btn.active {
+  @apply bg-red-600 text-white;
+}
+
+.filter-btn:not(.active) {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+}
+
+.dark .filter-btn:not(.active) {
+  @apply bg-gray-800 text-gray-300 hover:bg-gray-700;
+}
+
+.search-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500;
+}
+
+.dark .search-input {
+  @apply bg-gray-800 border-gray-600 text-white placeholder-gray-500;
+}
+
+.highlight-card {
+  @apply bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl p-6 shadow-lg;
+}
+
+/* Calendar Styles - Google Calendar Style */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Calendar grid container */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+}
+
+/* Calendar day cell */
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4px;
+  font-size: 0.75rem;
+}
+
+.calendar-day:hover {
+  background-color: #f9fafb;
+}
+
+.dark .calendar-day:hover {
+  background-color: #374151;
+}
+
+.calendar-day.padding {
+  color: #d1d5db;
+}
+
+.dark .calendar-day.padding {
+  color: #4b5563;
+}
+
+/* Holiday dots */
+.holiday-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.holiday-dot.public {
+  background-color: #ef4444;
+}
+
+.holiday-dot.joint {
+  background-color: #f59e0b;
+}
+
+.holiday-dot.school {
+  background-color: #3b82f6;
+}
+
+/* Month card */
+.month-card {
+  @apply bg-white rounded-lg border border-gray-200 p-3;
+}
+
+.dark .month-card {
+  @apply bg-gray-800 border-gray-700;
+}
+
+/* Indonesia flag accent */
+.flag-accent {
+  background: linear-gradient(to bottom, #dc2626 50%, #ffffff 50%);
+}
+
+.dark .flag-accent {
+  background: linear-gradient(to bottom, #dc2626 50%, #374151 50%);
+}
+
+/* Responsive adjustments for calendar */
+@media (max-width: 640px) {
+  .calendar-day {
+    font-size: 0.625rem;
+  }
+}
+
+/* Animation for hover effects */
+.hover-lift {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Current date highlight - background only */
+.current-date {
+  @apply bg-blue-100;
+}
+
+.dark .current-date {
+  @apply bg-blue-900/30;
+}
+
+/* Holiday highlight - background only */
+.holiday-date {
+  @apply bg-red-50;
+}
+
+.dark .holiday-date {
+  @apply bg-red-900/20;
+}
+
+/* Past dates - dimmed */
+.past-date {
+  @apply opacity-40;
+}
+
+/* Weekend colors */
+.weekend-sunday {
+  @apply text-red-500;
+}
+
+.dark .weekend-sunday {
+  @apply text-red-400;
+}
+
+.weekend-saturday {
+  @apply text-blue-500;
+}
+
+.dark .weekend-saturday {
+  @apply text-blue-400;
+}
+
+/* Past weekend - muted */
+.past-weekend {
+  @apply text-gray-400;
+}
+
+.dark .past-weekend {
+  @apply text-gray-600;
+}
+
+/* Tooltip styles */
+.tooltip {
+  @apply bg-white rounded-lg shadow-xl border border-gray-200 p-3 max-w-xs;
+}
+
+.dark .tooltip {
+  @apply bg-gray-800 border-gray-600;
+}
+
+/* Button styles for dark mode */
+.dark .btn-primary {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+}
+
+/* Border styles for dark mode */
+.dark .border-default {
+  @apply border-gray-700;
+}
+
+/* Text colors for dark mode */
+.dark .text-default {
+  @apply text-gray-100;
+}
+
+.dark .text-muted {
+  @apply text-gray-400;
+}
+
+/* Background colors for dark mode */
+.dark .bg-default {
+  @apply bg-gray-800;
+}
+
+.dark .bg-elevated {
+  @apply bg-gray-700;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+  background-color: #fecaca;
+  color: #991b1b;
+}
+
+.dark ::selection {
+  background-color: #7f1d1d;
+  color: #fecaca;
+}

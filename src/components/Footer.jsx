@@ -6,14 +6,20 @@ export default function Footer({ darkMode }) {
   return (
     <footer
       className={`border-t transition-colors duration-300 ${
-        darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+        darkMode
+          ? "bg-[#004643] border-[#fefae0cc]-700"
+          : "bg-[#abd1c6] border-gray-200"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Bottom */}
-        <div className="py-2 flex flex-col md:flex-row justify-center items-center">
-          <p className="text-sm text-white ">
-            Cuti Kuy -{" "}
+        <div
+          className={`py-2 flex flex-col md:flex-row justify-center items-center font-['Doto'] text-base font-bold ${
+            darkMode ? "text-[#fffffe]" : "text-[#001e1d]"
+          }`}
+        >
+          <p>
+            CUTI KUY -{" "}
             <a
               href={import.meta.env.VITE_URL_SKB_MENTERI}
               target="_blank"

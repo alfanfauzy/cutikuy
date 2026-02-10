@@ -66,28 +66,33 @@ function App() {
       }
     };
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
-        darkMode ? "dark bg-gray-900" : "bg-gray-50"
+        darkMode ? "dark bg-[#eaddcf]" : "bg-[#f9f4ef]"
       }`}
     >
       {/* Header - Hidden in calendar only mode */}
-      {!calendarOnlyMode && <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />}
+      {!calendarOnlyMode && (
+        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      )}
 
       <main className="transition-colors duration-300">
         {/* Calendar Section - Fullscreen capable */}
         <section
           id="holidays"
           ref={calendarContainerRef}
-          className={`${calendarOnlyMode ? "h-screen overflow-auto p-4" : "py-4"}`}
+          className={`${calendarOnlyMode ? "h-screen overflow-auto p-4" : "py-8"}`}
         >
           <div
             className={`${
-              calendarOnlyMode ? "h-full max-w-full" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+              calendarOnlyMode
+                ? "h-full max-w-full"
+                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
             }`}
           >
             <CalendarView

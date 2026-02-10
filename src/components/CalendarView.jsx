@@ -24,11 +24,11 @@ const MONTHS_ID = [
   "Desember",
 ];
 
-export default function CalendarView({ 
-  holidays, 
-  darkMode, 
-  calendarOnlyMode = false, 
-  toggleCalendarFullscreen 
+export default function CalendarView({
+  holidays,
+  darkMode,
+  calendarOnlyMode = false,
+  toggleCalendarFullscreen,
 }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState("year");
@@ -121,14 +121,14 @@ export default function CalendarView({
       {/* Filter Bar with Tabs */}
       <div
         className={`rounded-xl shadow-sm border p-4 transition-colors duration-500 ${
-          darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+          darkMode ? "bg-[#abd1c6]" : "bg-white border-gray-200"
         }`}
       >
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* View Tabs */}
           <div
             className={`flex rounded-lg p-1 transition-colors duration-500 ${
-              darkMode ? "bg-gray-900" : "bg-gray-100"
+              darkMode ? "bg-[#004643]" : "bg-gray-100"
             }`}
           >
             {[
@@ -142,7 +142,7 @@ export default function CalendarView({
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   viewMode === id
                     ? darkMode
-                      ? "bg-gray-700 text-red-400 shadow-sm"
+                      ? "bg-[#fffffe] text-[#001e1d] shadow-sm"
                       : "bg-white text-red-600 shadow-sm"
                     : darkMode
                       ? "text-gray-400 hover:text-gray-200"
@@ -195,7 +195,7 @@ export default function CalendarView({
             onClick={handleFullscreenToggle}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${
               darkMode
-                ? "text-gray-300 hover:bg-gray-700 border-gray-600"
+                ? "text-[#fffffe] hover:bg-gray-700 border-gray-600 bg-[#004643]"
                 : "text-gray-600 hover:bg-gray-100 border-gray-200"
             }`}
           >
@@ -252,7 +252,7 @@ export default function CalendarView({
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-red-500"></span>
           <span
-            className={`transition-colors duration-500 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
+            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
           >
             Libur Nasional
           </span>
@@ -260,7 +260,7 @@ export default function CalendarView({
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-amber-500"></span>
           <span
-            className={`transition-colors duration-500 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
+            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
           >
             Cuti Bersama
           </span>
@@ -268,7 +268,7 @@ export default function CalendarView({
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-sm bg-blue-300 border border-blue-300"></span>
           <span
-            className={`transition-colors duration-500 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
+            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
           >
             Hari Ini
           </span>

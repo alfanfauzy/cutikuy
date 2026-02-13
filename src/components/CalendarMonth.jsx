@@ -1,5 +1,6 @@
 // Calendar Month Component with Modern Theme
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 const DAYS = ["MIN", "SEN", "SEL", "RAB", "KAM", "JUM", "SAB"];
 const DAYS_FULL = [
@@ -26,7 +27,7 @@ const MONTHS_ID = [
   "Desember",
 ];
 
-// Tooltip Component - Fixed positioning to show correctly
+// Tooltip Component with Portal for correct positioning
 function Tooltip({ holiday, visible, x, y }) {
   if (!visible || !holiday) return null;
 
@@ -34,7 +35,7 @@ function Tooltip({ holiday, visible, x, y }) {
     holiday.category === "public"
       ? "border-l-4 border-red-500"
       : holiday.category === "joint"
-        ? "border-l-4 border-amber-500"
+        ? "border-l-4 border-amber-900"
         : "border-l-4 border-blue-500";
 
   const categoryLabel =
@@ -62,9 +63,19 @@ function Tooltip({ holiday, visible, x, y }) {
     top = y - tooltipHeight - 12;
   }
 
-  return (
+  // Prevent going off left edge
+  if (left < padding) {
+    left = padding;
+  }
+
+  // Prevent going off top edge
+  if (top < padding) {
+    top = padding;
+  }
+
+  const tooltipContent = (
     <div
-      className={`fixed z-[9999] rounded-xl border bg-popover p-3 shadow-lg max-w-[280px] ${colorClass} pointer-events-none`}
+      className={`fixed z-[9999] rounded-xl border border-border bg-popover p-3 shadow-xl max-w-[280px] ${colorClass} pointer-events-none animate-fade-scale`}
       style={{
         left: `${left}px`,
         top: `${top}px`,
@@ -90,6 +101,8 @@ function Tooltip({ holiday, visible, x, y }) {
       </div>
     </div>
   );
+
+  return createPortal(tooltipContent, document.body);
 }
 
 export default function CalendarMonth({
@@ -99,7 +112,6 @@ export default function CalendarMonth({
   selectedCategory,
   currentDate,
   viewMode = "mini",
-  darkMode = true,
 }) {
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -146,7 +158,6 @@ export default function CalendarMonth({
       }
     });
   };
-
   const hasHoliday = (day) => {
     return monthHolidays.some((h) => {
       const date = new Date(h.date);
@@ -243,7 +254,7 @@ export default function CalendarMonth({
     return "bg-transparent";
   };
 
-  // Get text color
+  // Get text color - using CSS variables for proper dark mode support
   const getTextColor = (item, isCurrentDay, isPast, isHoliday, dayOfWeek) => {
     const isSunday = dayOfWeek === 0;
     const isSaturday = dayOfWeek === 6;
@@ -285,7 +296,7 @@ export default function CalendarMonth({
             </p>
           </div>
 
-          {/* Day Headers */}
+          {/* Day Headers - using CSS classes for dark mode instead of prop */}
           <div className="grid grid-cols-7 gap-0 mb-2">
             {DAYS_FULL.map((day, idx) => (
               <div
@@ -295,9 +306,7 @@ export default function CalendarMonth({
                     ? "text-red-500"
                     : idx === 6
                       ? "text-blue-500"
-                      : darkMode
-                        ? "text-white"
-                        : "text-black"
+                      : "text-foreground"
                 }`}
               >
                 {day}
@@ -401,7 +410,6 @@ export default function CalendarMonth({
         visible={tooltip.visible}
         x={tooltip.x}
         y={tooltip.y}
-        darkMode={darkMode}
       />
 
       <div className="rounded-xl border-2 border-border bg-card p-3 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5">
@@ -410,7 +418,7 @@ export default function CalendarMonth({
           {MONTHS_ID[month]}
         </h3>
 
-        {/* Day Headers */}
+        {/* Day Headers - using CSS classes for dark mode */}
         <div className="grid grid-cols-7 gap-0 mb-1">
           {DAYS.map((day, idx) => (
             <div
@@ -420,9 +428,7 @@ export default function CalendarMonth({
                   ? "text-red-500"
                   : idx === 6
                     ? "text-blue-500"
-                    : darkMode
-                      ? "text-white"
-                      : "text-black"
+                    : "text-muted-foreground"
               }`}
             >
               {day}

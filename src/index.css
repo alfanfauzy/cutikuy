@@ -113,6 +113,23 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
   
+  /* Smooth theme transitions - Applied to all color properties */
+  *,
+  *::before,
+  *::after {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+  
+  /* Disable transition for performance-critical elements */
+  .no-transition,
+  .no-transition *,
+  .no-transition *::before,
+  .no-transition *::after {
+    transition: none !important;
+  }
+  
   /* Smooth theme transitions */
   html {
     scroll-behavior: smooth;
@@ -127,5 +144,98 @@
   .dark ::selection {
     background-color: hsl(var(--primary) / 0.4);
     color: hsl(var(--primary-foreground));
+  }
+}
+
+@layer utilities {
+  /* ========================================
+     Filter Button Animations
+     ======================================== */
+  
+  /* Scale animation for filter buttons */
+  .btn-animate {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-animate::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  
+  .btn-animate:hover::before {
+    transform: translateX(100%);
+  }
+  
+  /* Active state pulse animation */
+  @keyframes btn-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  
+  .btn-active-pulse {
+    animation: btn-pulse 0.3s ease-in-out;
+  }
+  
+  /* Slide in animation for content */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.4s ease-out forwards;
+  }
+  
+  /* Fade scale animation */
+  @keyframes fade-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-fade-scale {
+    animation: fade-scale 0.3s ease-out forwards;
+  }
+  
+  /* Count badge bounce animation */
+  @keyframes badge-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  
+  .animate-badge {
+    animation: badge-bounce 0.3s ease-in-out;
+  }
+  
+  /* Dot indicator animation */
+  @keyframes dot-ping {
+    0% { transform: scale(1); opacity: 1; }
+    75% { transform: scale(2); opacity: 0; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+  
+  .dot-ping::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: inherit;
+    animation: dot-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }

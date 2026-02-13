@@ -3,7 +3,7 @@ import { Moon, Sun, Heart } from "lucide-react";
 export default function Header({ darkMode, toggleDarkMode }) {
   return (
     <header className="sticky top-4 z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav className="nav-glass rounded-full border shadow-soft transition-all duration-300">
+      <nav className="rounded-full border border-border bg-amber-500 backdrop-blur-xl backdrop-saturate-150 shadow-md transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-14">
             {/* Logo */}

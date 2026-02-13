@@ -2,13 +2,24 @@
    Cuti Kuy - Modern Dark/Light Theme
    ======================================== */
 
-/* Smooth transitions for theme switching */
+/* ========================================
+   Global Smooth Theme Transitions
+   ======================================== */
+
+/* Base transition for all elements */
 *,
 *::before,
 *::after {
-  transition-property: background-color, border-color, color, fill, stroke;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Extended transition during theme switch */
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition-duration: 500ms !important;
 }
 
 /* Disable transition for performance-critical elements */

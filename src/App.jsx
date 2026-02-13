@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "./components/Header";
 import CalendarView from "./components/CalendarView";
 import Footer from "./components/Footer";
@@ -6,28 +6,55 @@ import { holidays, categories, states } from "./data/holidays";
 import "./App.css";
 
 function App() {
+  // Initialize theme from localStorage or system preference
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
       if (saved) return saved === "dark";
+      // Default to system preference
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
     return true;
   });
 
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
   const calendarContainerRef = useRef(null);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  // Smooth theme toggle with transition state
+  const toggleDarkMode = useCallback(() => {
+    setIsTransitioning(true);
+    setDarkMode((prev) => !prev);
+    // Reset transitioning state after animation completes
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, []);
 
+  // Apply theme class and save to localStorage
   useEffect(() => {
+    const root = document.documentElement;
+    
     if (darkMode) {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e) => {
+      // Only auto-switch if user hasn't manually set preference
+      if (!localStorage.getItem("theme")) {
+        setDarkMode(e.matches);
+      }
+    };
+    
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   const toggleCalendarFullscreen = async () => {
     if (!calendarOnlyMode) {
@@ -64,9 +91,9 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 bg-background ${
+      className={`min-h-screen bg-background transition-colors duration-500 ease-in-out ${
         darkMode ? "dark" : ""
-      }`}
+      } ${isTransitioning ? "theme-transitioning" : ""}`}
     >
       {!calendarOnlyMode && (
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />

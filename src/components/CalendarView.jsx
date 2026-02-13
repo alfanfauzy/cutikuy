@@ -1,4 +1,3 @@
-// Google Calendar Style Year View - Indonesia Holidays with Dark Mode
 import { useState, useMemo } from "react";
 import {
   LayoutGrid,
@@ -35,13 +34,11 @@ export default function CalendarView({
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [year] = useState(2026);
 
-  // Get current date info
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
   const currentDate = today.getDate();
 
-  // Filter holidays based on category
   const filteredHolidays = useMemo(() => {
     return holidays.filter((h) => {
       if (selectedCategory === "all") return true;
@@ -49,7 +46,6 @@ export default function CalendarView({
     });
   }, [holidays, selectedCategory]);
 
-  // Group holidays by month
   const holidaysByMonth = useMemo(() => {
     const grouped = {};
     filteredHolidays.forEach((holiday) => {
@@ -62,7 +58,6 @@ export default function CalendarView({
     return grouped;
   }, [filteredHolidays]);
 
-  // Calculate holidays count per month
   const holidaysPerMonth = useMemo(() => {
     const counts = new Array(12).fill(0);
     filteredHolidays.forEach((h) => {
@@ -72,7 +67,6 @@ export default function CalendarView({
     return counts;
   }, [filteredHolidays]);
 
-  // Calculate total stats
   const stats = useMemo(() => {
     return {
       total: holidays.length,
@@ -81,76 +75,67 @@ export default function CalendarView({
     };
   }, [holidays]);
 
-  // Toggle fullscreen - uses the prop from parent
   const handleFullscreenToggle = () => {
     if (toggleCalendarFullscreen) {
       toggleCalendarFullscreen();
     }
   };
 
-  // Filter buttons config
   const filterButtons = [
     {
       id: "all",
       label: "Semua",
-      color: "bg-green-500",
-      bg: "bg-green-100",
-      border: "border-green-500",
+      color: "bg-emerald-500",
+      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+      border: "border-emerald-500",
+      text: "text-emerald-700 dark:text-emerald-300",
       count: stats.total,
     },
     {
       id: "public",
       label: "Libur Nasional",
       color: "bg-red-500",
-      bg: "bg-red-100",
+      bg: "bg-red-100 dark:bg-red-900/30",
       border: "border-red-500",
+      text: "text-red-700 dark:text-red-300",
       count: stats.public,
     },
     {
       id: "joint",
       label: "Cuti Bersama",
       color: "bg-amber-500",
-      bg: "bg-amber-100",
+      bg: "bg-amber-100 dark:bg-amber-900/30",
       border: "border-amber-500",
+      text: "text-amber-700 dark:text-amber-300",
       count: stats.joint,
     },
   ];
 
+  const viewButtons = [
+    { id: "year", icon: <LayoutGrid className="w-4 h-4" />, label: "Tahun" },
+    { id: "month", icon: <CalendarIcon className="w-4 h-4" />, label: "Bulan" },
+    { id: "list", icon: <List className="w-4 h-4" />, label: "Daftar" },
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Filter Bar with Tabs */}
-      <div
-        className={`rounded-xl shadow-sm border p-4 transition-colors duration-500 ${
-          darkMode ? "bg-[#abd1c6]" : "bg-white border-gray-200"
-        }`}
-      >
+    <div className="space-y-6">
+      {/* Control Panel */}
+      <div className="rounded-2xl border-2 border-border bg-card p-4 shadow-md transition-colors duration-300">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          {/* View Tabs */}
-          <div
-            className={`flex rounded-lg p-1 transition-colors duration-500 ${
-              darkMode ? "bg-[#004643]" : "bg-gray-100"
-            }`}
-          >
-            {[
-              { id: "year", icon: LayoutGrid, label: "Tahun" },
-              { id: "month", icon: CalendarIcon, label: "Bulan" },
-              { id: "list", icon: List, label: "Daftar" },
-            ].map(({ id, icon: Icon, label }) => (
+          {/* View Mode Toggle */}
+          <div className="flex rounded-xl p-1 bg-muted border border-border">
+            {viewButtons.map((item) => (
               <button
-                key={id}
-                onClick={() => setViewMode(id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
-                  viewMode === id
-                    ? darkMode
-                      ? "bg-[#fffffe] text-[#001e1d] shadow-sm"
-                      : "bg-white text-red-600 shadow-sm"
-                    : darkMode
-                      ? "text-gray-400 hover:text-gray-200"
-                      : "text-gray-600 hover:text-gray-900"
+                key={item.id}
+                onClick={() => setViewMode(item.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 font-['Doto'] ${
+                  viewMode === item.id
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{label}</span>
+                {item.icon}
+                <span className="hidden sm:inline">{item.label}</span>
               </button>
             ))}
           </div>
@@ -161,28 +146,16 @@ export default function CalendarView({
               <button
                 key={btn.id}
                 onClick={() => setSelectedCategory(btn.id)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200 font-['Doto'] border ${
                   selectedCategory === btn.id
-                    ? darkMode
-                      ? `${btn.bg} text-gray-800 shadow-sm ${btn.border}`
-                      : `${btn.bg} text-gray-500 shadow-sm border ${btn.border}`
-                    : darkMode
-                      ? `bg-gray-100 text-gray-400`
-                      : `bg-white text-gray-700 border border-gray-400`
+                    ? `${btn.bg} ${btn.text} ${btn.border}`
+                    : "bg-muted text-muted-foreground border-transparent hover:border-border"
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${btn.color}`} />
                 {btn.label}
                 <span
-                  className={`text-xs px-1.5 py-0.5 rounded transition-colors duration-300 ${
-                    selectedCategory === btn.id
-                      ? darkMode
-                        ? `${btn.color} text-white`
-                        : `${btn.color} text-white`
-                      : darkMode
-                        ? `${btn.color} text-white`
-                        : `${btn.color}  text-white`
-                  }`}
+                  className={`text-xs px-1.5 py-0.5 rounded-full ${btn.color} text-white`}
                 >
                   {btn.count}
                 </span>
@@ -193,11 +166,7 @@ export default function CalendarView({
           {/* Fullscreen Button */}
           <button
             onClick={handleFullscreenToggle}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${
-              darkMode
-                ? "text-[#fffffe] hover:bg-gray-700 border-gray-600 bg-[#004643]"
-                : "text-gray-600 hover:bg-gray-100 border-gray-200"
-            }`}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 font-['Doto'] bg-primary text-primary-foreground hover:opacity-90 hover:shadow-glow"
           >
             {calendarOnlyMode ? (
               <Minimize2 className="w-4 h-4" />
@@ -210,33 +179,23 @@ export default function CalendarView({
           </button>
         </div>
 
-        {/* Month Selector (for Month View) */}
+        {/* Month Selector (Month View Only) */}
         {viewMode === "month" && (
-          <div
-            className={`mt-4 pt-4 border-t transition-colors duration-500 ${
-              darkMode ? "border-gray-700" : "border-gray-100"
-            }`}
-          >
+          <div className="mt-4 pt-4 border-t border-border">
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               {MONTHS_ID.map((month, idx) => (
                 <button
                   key={month}
                   onClick={() => setSelectedMonth(idx)}
-                  className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  className={`whitespace-nowrap font-bold px-3 py-1.5 rounded-xl text-sm transition-all duration-200 ${
                     selectedMonth === idx
-                      ? darkMode
-                        ? "bg-red-600 text-white"
-                        : "bg-red-600 text-white"
-                      : darkMode
-                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {month}
                   {holidaysPerMonth[idx] > 0 && (
-                    <span
-                      className={`ml-1 text-xs ${selectedMonth === idx ? "text-red-200" : darkMode ? "text-gray-500" : "text-gray-500"}`}
-                    >
+                    <span className="ml-1 text-xs opacity-70">
                       ({holidaysPerMonth[idx]})
                     </span>
                   )}
@@ -248,36 +207,27 @@ export default function CalendarView({
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-4 text-sm">
+      <div className="flex flex-wrap justify-center gap-6 text-sm">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-red-500"></span>
-          <span
-            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
-          >
+          <span className="text-muted-foreground font-medium">
             Libur Nasional
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-          <span
-            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
-          >
+          <span className="text-muted-foreground font-medium">
             Cuti Bersama
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-blue-300 border border-blue-300"></span>
-          <span
-            className={`transition-colors duration-500 ${darkMode ? "text-[#716040]" : "text-gray-600"}`}
-          >
-            Hari Ini
-          </span>
+          <span className="w-3 h-3 rounded-sm bg-blue-500/30 border border-blue-500"></span>
+          <span className="text-muted-foreground font-medium">Hari Ini</span>
         </div>
       </div>
 
-      {/* Views */}
+      {/* Year View */}
       {viewMode === "year" && (
-        /* Year View - 12 Month Grid */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {MONTHS_ID.map((monthName, monthIndex) => (
             <CalendarMonth
@@ -298,8 +248,8 @@ export default function CalendarView({
         </div>
       )}
 
+      {/* Month View */}
       {viewMode === "month" && (
-        /* Month View - Single Large Month */
         <div className="max-w-3xl mx-auto">
           <CalendarMonth
             year={year}
@@ -317,74 +267,40 @@ export default function CalendarView({
         </div>
       )}
 
+      {/* List View */}
       {viewMode === "list" && (
-        /* List View with Month Separators */
-        <div
-          className={`rounded-xl shadow-sm border overflow-hidden transition-colors duration-500 ${
-            darkMode
-              ? "bg-gray-800 border-gray-700"
-              : "bg-white border-gray-200"
-          }`}
-        >
-          <div
-            className={`px-6 py-4 border-b transition-colors duration-500 ${
-              darkMode
-                ? "bg-gray-900 border-gray-700"
-                : "bg-gray-50 border-gray-100"
-            }`}
-          >
-            <h3
-              className={`font-semibold transition-colors duration-500 ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
+        <div className="rounded-2xl border-2 border-border bg-card shadow-lg overflow-hidden">
+          {/* List Header */}
+          <div className="px-6 py-4 border-b bg-muted/50">
+            <h3 className="font-semibold text-foreground">
               Daftar Hari Libur 2026
             </h3>
           </div>
 
           {filteredHolidays.length === 0 ? (
             <div className="p-8 text-center">
-              <CalendarIcon
-                className={`h-12 w-12 mx-auto mb-3 ${darkMode ? "text-gray-600" : "text-gray-300"}`}
-              />
-              <p
-                className={`transition-colors duration-500 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
-              >
-                Tidak ada hari libur
-              </p>
+              <CalendarIcon className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+              <p className="text-muted-foreground">Tidak ada hari libur</p>
             </div>
           ) : (
             <div className="py-4">
               {Object.entries(holidaysByMonth).map(
                 ([monthIdx, monthHolidays], groupIndex) => (
                   <div key={monthIdx}>
-                    {/* Month Separator */}
                     {groupIndex > 0 && (
-                      <div
-                        className={`my-6 border-t transition-colors duration-500 ${
-                          darkMode ? "border-gray-700" : "border-gray-200"
-                        }`}
-                      />
+                      <div className="my-6 border-t border-border" />
                     )}
 
-                    {/* Month Header */}
-                    <div
-                      className={`px-6 mb-4 transition-colors duration-500 ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      <span className="text-xs font-medium uppercase tracking-wider">
+                    {/* Month Divider */}
+                    <div className="px-6 mb-4">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         {MONTHS_ID[parseInt(monthIdx)]} {year}
                       </span>
-                      <div
-                        className={`mt-1 h-px w-full transition-colors duration-500 ${
-                          darkMode ? "bg-gray-700" : "bg-gray-200"
-                        }`}
-                      />
+                      <div className="mt-1 h-px w-full bg-border" />
                     </div>
 
-                    {/* Holidays in this month */}
-                    <div className="space-y-3">
+                    {/* Holiday Items */}
+                    <div className="space-y-3 px-4">
                       {monthHolidays.map((holiday) => {
                         const date = new Date(holiday.date);
                         const day = date.getDate();
@@ -393,80 +309,46 @@ export default function CalendarView({
                         });
                         const isPast = date < new Date().setHours(0, 0, 0, 0);
 
-                        const colorClass =
+                        const badgeColor =
                           holiday.category === "public"
-                            ? darkMode
-                              ? "bg-red-900/30 text-red-300 border-red-800"
-                              : "bg-red-100 text-red-800 border-red-200"
+                            ? "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800"
                             : holiday.category === "joint"
-                              ? darkMode
-                                ? "bg-amber-900/30 text-amber-300 border-amber-800"
-                                : "bg-amber-100 text-amber-800 border-amber-200"
-                              : darkMode
-                                ? "bg-blue-900/300 text-blue-300 border-blue-800"
-                                : "bg-blue-100 text-blue-800 border-blue-200";
+                              ? "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800"
+                              : "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800";
 
                         return (
                           <div
                             key={holiday.id}
-                            className={`mx-4 p-4 rounded-lg border transition-all duration-300 ${
+                            className={`p-4 rounded-xl border transition-all duration-200 hover:shadow-soft ${
                               isPast
-                                ? darkMode
-                                  ? "opacity-40 bg-gray-800/50 border-gray-700"
-                                  : "opacity-50 bg-gray-50 border-gray-200"
-                                : darkMode
-                                  ? "bg-gray-800 border-gray-600 hover:border-gray-500 hover:shadow-md"
-                                  : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                                ? "opacity-50 bg-muted/50 border-border"
+                                : "bg-card border-border hover:border-primary/30"
                             }`}
                           >
                             <div className="flex items-start gap-4">
                               {/* Date Box */}
-                              <div
-                                className={`flex-shrink-0 w-16 text-center p-2 rounded-lg transition-colors duration-300 ${
-                                  isPast
-                                    ? darkMode
-                                      ? "bg-gray-800"
-                                      : "bg-gray-100"
-                                    : darkMode
-                                      ? "bg-gray-700"
-                                      : "bg-gray-50"
-                                }`}
-                              >
-                                <div
-                                  className={`text-xs uppercase transition-colors duration-300 ${darkMode ? "text-gray-500" : "text-gray-500"}`}
-                                >
+                              <div className="flex-shrink-0 w-16 text-center p-2 rounded-xl bg-muted">
+                                <div className="text-xs uppercase text-muted-foreground">
                                   {MONTHS_ID[parseInt(monthIdx)].slice(0, 3)}
                                 </div>
-                                <div
-                                  className={`text-xl font-bold transition-colors duration-300 ${darkMode ? "text-gray-300" : "text-gray-900"}`}
-                                >
+                                <div className="text-xl font-bold text-foreground">
                                   {day}
                                 </div>
-                                <div
-                                  className={`text-xs transition-colors duration-300 ${darkMode ? "text-gray-600" : "text-gray-400"}`}
-                                >
+                                <div className="text-xs text-muted-foreground">
                                   {weekday.slice(0, 3)}
                                 </div>
                               </div>
 
                               {/* Holiday Info */}
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1 flex-wrap">
                                   <h4
-                                    className={`font-bold text-base transition-colors duration-300 ${
-                                      isPast
-                                        ? darkMode
-                                          ? "text-gray-500"
-                                          : "text-gray-500"
-                                        : darkMode
-                                          ? "text-white"
-                                          : "text-gray-900"
-                                    }`}
+                                    className={`font-bold text-base ${isPast ? "text-muted-foreground" : "text-foreground"}`}
                                   >
                                     {holiday.name}
                                   </h4>
                                   <span
-                                    className={`text-xs px-2 py-0.5 rounded-full border ${colorClass}`}
+                                    className={`text-xs px-2 py-0.5 rounded-full border ${badgeColor}`}
                                   >
                                     {holiday.category === "public"
                                       ? "Libur Nasional"
@@ -476,7 +358,7 @@ export default function CalendarView({
                                   </span>
                                 </div>
                                 <p
-                                  className={`text-sm transition-colors duration-300 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+                                  className={`text-sm ${isPast ? "text-muted-foreground/70" : "text-muted-foreground"}`}
                                 >
                                   {holiday.description}
                                 </p>

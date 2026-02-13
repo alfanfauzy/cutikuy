@@ -1,29 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* ========================================
+     LIGHT MODE - Bold, Vibrant, High Impact
+     ======================================== */
   :root {
-    --background: 30 33% 96%;
-    --foreground: 230 79% 2%;
-    --card: 30 32% 87%;
-    --card-foreground: 230 79% 2%;
-    --popover: 30 32% 87%;
-    --popover-foreground: 230 79% 2%;
-    --primary: 37 29% 43%;
-    --primary-foreground: 60 100% 100%;
-    --secondary: 30 32% 87%;
-    --secondary-foreground: 230 79% 2%;
-    --muted: 30 20% 90%;
-    --muted-foreground: 37 29% 35%;
-    --accent: 37 29% 43%;
-    --accent-foreground: 60 100% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 100% 100%;
-    --border: 30 20% 85%;
-    --input: 30 20% 85%;
-    --ring: 37 29% 43%;
-    --radius: 0.5rem;
+    /* Base Colors - Slightly warm background */
+    --background: 40 25% 96%;
+    --foreground: 222 47% 5%;
+    
+    /* Surface Colors - Bright white for cards */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 5%;
+    
+    /* Primary - Bold Indigo */
+    --primary: 239 85% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Stronger slate */
+    --secondary: 215 28% 45%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Muted - Warmer, more visible gray */
+    --muted: 40 20% 90%;
+    --muted-foreground: 215 20% 35%;
+    
+    /* Accent - Bold Amber/Orange */
+    --accent: 28 100% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive - Bold Red */
+    --destructive: 0 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders - More defined */
+    --border: 215 25% 80%;
+    --input: 215 25% 80%;
+    --ring: 239 85% 50%;
+    
+    /* Radius */
+    --radius: 0.75rem;
+    
+    /* Holiday-specific semantic colors - Bold */
+    --holiday-public: 0 85% 50%;
+    --holiday-joint: 28 100% 45%;
+    --holiday-school: 217 90% 50%;
+    --weekend-sat: 217 90% 48%;
+    --weekend-sun: 0 85% 50%;
+    --today: 217 90% 50%;
+  }
+
+  /* ========================================
+     DARK MODE - Deep, Elegant, Easy on Eyes
+     ======================================== */
+  .dark {
+    /* Base Colors - Deep slate instead of pure black */
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+    
+    /* Surface Colors - Slightly elevated from background */
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Primary - Brighter Indigo for dark mode */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Muted slate */
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* Muted */
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 55%;
+    
+    /* Accent - Amber for dark mode (glows nicely) */
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive */
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders - Subtle but visible */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 67%;
+    
+    /* Holiday colors - adjusted for dark mode visibility */
+    --holiday-public: 0 84% 60%;
+    --holiday-joint: 38 92% 50%;
+    --holiday-school: 217 91% 60%;
+    --weekend-sat: 217 91% 60%;
+    --weekend-sun: 0 84% 60%;
+    --today: 217 91% 60%;
   }
 }
 
@@ -32,6 +110,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  /* Smooth theme transitions */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Selection styling */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.3);
+    color: hsl(var(--primary));
+  }
+  
+  .dark ::selection {
+    background-color: hsl(var(--primary) / 0.4);
+    color: hsl(var(--primary-foreground));
   }
 }

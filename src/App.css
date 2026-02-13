@@ -1,11 +1,13 @@
-/* Indonesia Holidays Theme - Google Calendar Style with Dark Mode */
+/* ========================================
+   Cuti Kuy - Modern Dark/Light Theme
+   ======================================== */
 
-/* Smooth transition for all color-related properties */
+/* Smooth transitions for theme switching */
 *,
 *::before,
 *::after {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-duration: 300ms;
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -17,54 +19,9 @@
   transition: none !important;
 }
 
-/* Hero gradient - Indonesia red theme */
-.hero-gradient {
-  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #991b1b 100%);
-}
-
-/* Table styles (kept for compatibility) */
-.table-header {
-  @apply bg-red-600 text-white;
-}
-
-.holiday-row:hover {
-  @apply bg-red-50;
-}
-
-.dark .holiday-row:hover {
-  @apply bg-red-900/20;
-}
-
-/* Filter buttons */
-.filter-btn {
-  @apply px-4 py-2 rounded-lg;
-}
-
-.filter-btn.active {
-  @apply bg-red-600 text-white;
-}
-
-.filter-btn:not(.active) {
-  @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
-}
-
-.dark .filter-btn:not(.active) {
-  @apply bg-gray-800 text-gray-300 hover:bg-gray-700;
-}
-
-.search-input {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500;
-}
-
-.dark .search-input {
-  @apply bg-gray-800 border-gray-600 text-white placeholder-gray-500;
-}
-
-.highlight-card {
-  @apply bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl p-6 shadow-lg;
-}
-
-/* Calendar Styles - Google Calendar Style */
+/* ========================================
+   Scrollbar Styling
+   ======================================== */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -74,14 +31,35 @@
   display: none;
 }
 
-/* Calendar grid container */
+/* Custom scrollbar for non-hide elements */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* ========================================
+   Calendar Grid Styles
+   ======================================== */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0;
 }
 
-/* Calendar day cell */
 .calendar-day {
   aspect-ratio: 1;
   display: flex;
@@ -93,22 +71,16 @@
 }
 
 .calendar-day:hover {
-  background-color: #f9fafb;
-}
-
-.dark .calendar-day:hover {
-  background-color: #374151;
+  background-color: hsl(var(--muted));
 }
 
 .calendar-day.padding {
-  color: #d1d5db;
+  color: hsl(var(--muted-foreground) / 0.5);
 }
 
-.dark .calendar-day.padding {
-  color: #4b5563;
-}
-
-/* Holiday dots */
+/* ========================================
+   Holiday Indicators
+   ======================================== */
 .holiday-dot {
   width: 6px;
   height: 6px;
@@ -117,162 +89,202 @@
 }
 
 .holiday-dot.public {
-  background-color: #ef4444;
+  background-color: hsl(var(--holiday-public));
 }
 
 .holiday-dot.joint {
-  background-color: #f59e0b;
+  background-color: hsl(var(--holiday-joint));
 }
 
 .holiday-dot.school {
-  background-color: #3b82f6;
+  background-color: hsl(var(--holiday-school));
 }
 
-/* Month card */
+/* ========================================
+   Month Card Styling
+   ======================================== */
 .month-card {
-  @apply bg-white rounded-lg border border-gray-200 p-3;
+  @apply rounded-xl border-2 p-3;
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
-.dark .month-card {
-  @apply bg-gray-800 border-gray-700;
-}
-
-/* Indonesia flag accent */
-.flag-accent {
-  background: linear-gradient(to bottom, #dc2626 50%, #ffffff 50%);
-}
-
-.dark .flag-accent {
-  background: linear-gradient(to bottom, #dc2626 50%, #374151 50%);
-}
-
-/* Responsive adjustments for calendar */
-@media (max-width: 640px) {
-  .calendar-day {
-    font-size: 0.625rem;
-  }
-}
-
-/* Animation for hover effects */
+/* ========================================
+   Interactive Elements
+   ======================================== */
 .hover-lift {
   transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
 .hover-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 
-/* Current date highlight - background only */
+.dark .hover-lift:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   Date Highlighting
+   ======================================== */
+
+/* Today's date */
 .current-date {
-  @apply bg-blue-100;
+  background-color: hsl(var(--today) / 0.15);
 }
 
 .dark .current-date {
-  @apply bg-blue-900/30;
+  background-color: hsl(var(--today) / 0.2);
 }
 
-/* Holiday highlight - background only */
+/* Holiday dates */
 .holiday-date {
-  @apply bg-red-50;
+  background-color: hsl(var(--holiday-public) / 0.08);
 }
 
 .dark .holiday-date {
-  @apply bg-red-900/20;
+  background-color: hsl(var(--holiday-public) / 0.15);
 }
 
-/* Past dates - dimmed */
+/* Past dates */
 .past-date {
-  @apply opacity-40;
+  opacity: 0.5;
 }
 
 /* Weekend colors */
 .weekend-sunday {
-  @apply text-red-500;
-}
-
-.dark .weekend-sunday {
-  @apply text-red-400;
+  color: hsl(var(--weekend-sun));
 }
 
 .weekend-saturday {
-  @apply text-blue-500;
+  color: hsl(var(--weekend-sat));
 }
 
-.dark .weekend-saturday {
-  @apply text-blue-400;
-}
-
-/* Past weekend - muted */
 .past-weekend {
-  @apply text-gray-400;
+  color: hsl(var(--muted-foreground));
 }
 
-.dark .past-weekend {
-  @apply text-gray-600;
-}
-
-/* Tooltip styles */
+/* ========================================
+   Tooltip Styles
+   ======================================== */
 .tooltip {
-  @apply bg-white rounded-lg shadow-xl border border-gray-200 p-3 max-w-xs;
+  @apply rounded-xl p-3 max-w-xs;
+  background-color: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .dark .tooltip {
-  @apply bg-gray-800 border-gray-600;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
-/* Button styles for dark mode */
-.dark .btn-primary {
-  @apply bg-red-600 text-white hover:bg-red-700;
+/* ========================================
+   Button Styles
+   ======================================== */
+.btn-primary {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
-.dark .btn-secondary {
-  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+.btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+  transform: translateY(-1px);
 }
 
-/* Border styles for dark mode */
-.dark .border-default {
-  @apply border-gray-700;
+.btn-secondary {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
 }
 
-/* Text colors for dark mode */
-.dark .text-default {
-  @apply text-gray-100;
+.btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
 }
 
-.dark .text-muted {
-  @apply text-gray-400;
+/* ========================================
+   Filter Button Styles
+   ======================================== */
+.filter-btn {
+  @apply px-4 py-2 rounded-lg transition-all duration-200 font-medium;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
 }
 
-/* Background colors for dark mode */
-.dark .bg-default {
-  @apply bg-gray-800;
+.filter-btn:hover {
+  background-color: hsl(var(--muted-foreground) / 0.2);
 }
 
-.dark .bg-elevated {
-  @apply bg-gray-700;
+.filter-btn.active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* ========================================
+   Input Styles
+   ======================================== */
+.search-input {
+  @apply w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--input));
+  color: hsl(var(--foreground));
 }
 
-/* Focus styles */
+.search-input:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.2);
+}
+
+.search-input::placeholder {
+  color: hsl(var(--muted-foreground) / 0.6);
+}
+
+/* ========================================
+   Focus Styles (Accessibility)
+   ======================================== */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-  outline: 2px solid #dc2626;
+  outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
 }
 
-/* Selection styles */
-::selection {
-  background-color: #fecaca;
-  color: #991b1b;
+/* ========================================
+   Highlight Card
+   ======================================== */
+.highlight-card {
+  @apply rounded-xl p-6;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 10px 30px -5px hsl(var(--primary) / 0.3);
 }
 
-.dark ::selection {
-  background-color: #7f1d1d;
-  color: #fecaca;
+/* ========================================
+   Hero Section (if used)
+   ======================================== */
+.hero-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+}
+
+/* ========================================
+   Table Styles
+   ======================================== */
+.table-header {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.holiday-row:hover {
+  background-color: hsl(var(--muted));
+}
+
+/* ========================================
+   Responsive Adjustments
+   ======================================== */
+@media (max-width: 640px) {
+  .calendar-day {
+    font-size: 0.625rem;
+  }
 }

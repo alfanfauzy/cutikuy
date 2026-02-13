@@ -6,7 +6,6 @@ import { holidays, categories, states } from "./data/holidays";
 import "./App.css";
 
 function App() {
-  // Dark mode state - check system preference
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
@@ -15,16 +14,13 @@ function App() {
     return true;
   });
 
-  // Calendar fullscreen mode (hides header/footer)
   const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
   const calendarContainerRef = useRef(null);
 
-  // Toggle dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
-  // Apply dark mode class to document
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -33,32 +29,28 @@ function App() {
     }
   }, [darkMode]);
 
-  // Handle calendar fullscreen toggle
   const toggleCalendarFullscreen = async () => {
     if (!calendarOnlyMode) {
-      // Enter fullscreen - hide header/footer
       setCalendarOnlyMode(true);
       try {
         if (calendarContainerRef.current) {
           await calendarContainerRef.current.requestFullscreen();
         }
       } catch (err) {
-        console.log("Fullscreen API not supported, using fallback");
+        console.log("Fullscreen API not supported, using fallback", err);
       }
     } else {
-      // Exit fullscreen - show header/footer
       setCalendarOnlyMode(false);
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen();
         }
       } catch (err) {
-        console.log("Fullscreen API error");
+        console.log("Fullscreen error", err);
       }
     }
   };
 
-  // Listen for fullscreen change events (user presses ESC)
   useEffect(() => {
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
@@ -72,17 +64,15 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${
-        darkMode ? "dark bg-[#eaddcf]" : "bg-[#f9f4ef]"
+      className={`min-h-screen transition-colors duration-300 bg-background ${
+        darkMode ? "dark" : ""
       }`}
     >
-      {/* Header - Hidden in calendar only mode */}
       {!calendarOnlyMode && (
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       )}
 
       <main className="transition-colors duration-300">
-        {/* Calendar Section - Fullscreen capable */}
         <section
           id="holidays"
           ref={calendarContainerRef}
@@ -107,7 +97,6 @@ function App() {
         </section>
       </main>
 
-      {/* Footer - Hidden in calendar only mode */}
       {!calendarOnlyMode && <Footer darkMode={darkMode} />}
     </div>
   );

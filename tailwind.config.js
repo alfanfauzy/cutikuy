@@ -4,6 +4,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Doto", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -38,11 +41,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        /* Semantic holiday colors */
+        holiday: {
+          public: "hsl(var(--holiday-public))",
+          joint: "hsl(var(--holiday-joint))",
+          school: "hsl(var(--holiday-school))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+        'soft-dark': '0 2px 15px -3px rgba(0, 0, 0, 0.3), 0 10px 20px -2px rgba(0, 0, 0, 0.2)',
+        'glow': '0 0 20px hsl(var(--primary) / 0.3)',
+        'glow-accent': '0 0 20px hsl(var(--accent) / 0.3)',
       },
     },
   },
@@ -50,8 +65,8 @@ export default {
     function ({ addComponents }) {
       addComponents({
         ".nav-glass": {
-          backdropFilter: "blur(40px)",
-          background: "rgb(249, 188, 96, 0.8)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          background: "hsl(var(--card) / 0.8)",
         },
       });
     },

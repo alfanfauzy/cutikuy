@@ -122,6 +122,14 @@
     transition-duration: 300ms;
   }
   
+  /* Extended transition during theme switch - applied to html element */
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition-duration: 500ms !important;
+  }
+  
   /* Disable transition for performance-critical elements */
   .no-transition,
   .no-transition *,

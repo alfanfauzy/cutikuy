@@ -6,12 +6,10 @@ import { holidays, categories, states } from "./data/holidays";
 import "./App.css";
 
 function App() {
-  // Initialize theme from localStorage or system preference
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
       if (saved) return saved === "dark";
-      // Default to system preference
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
     return true;
@@ -21,7 +19,6 @@ function App() {
   const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
   const calendarContainerRef = useRef(null);
 
-  // Smooth theme toggle with transition state
   const toggleDarkMode = useCallback(() => {
     setIsTransitioning(true);
     setDarkMode((prev) => !prev);
@@ -29,10 +26,8 @@ function App() {
     setTimeout(() => setIsTransitioning(false), 500);
   }, []);
 
-  // Apply theme class and save to localStorage
   useEffect(() => {
     const root = document.documentElement;
-    
     if (darkMode) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -42,16 +37,14 @@ function App() {
     }
   }, [darkMode]);
 
-  // Listen for system theme changes
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e) => {
-      // Only auto-switch if user hasn't manually set preference
       if (!localStorage.getItem("theme")) {
         setDarkMode(e.matches);
       }
     };
-    
+
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
@@ -99,7 +92,7 @@ function App() {
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       )}
 
-      <main className="transition-colors duration-300">
+      <main>
         <section
           id="holidays"
           ref={calendarContainerRef}

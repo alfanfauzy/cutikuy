@@ -28,14 +28,14 @@ const MONTHS_ID = [
 ];
 
 // Tooltip Component with Portal for correct positioning
-function Tooltip({ holiday, visible, x, y }) {
+function Tooltip({ holiday, visible, x, y, darkMode }) {
   if (!visible || !holiday) return null;
 
   const colorClass =
     holiday.category === "public"
       ? "border-l-4 border-red-500"
       : holiday.category === "joint"
-        ? "border-l-4 border-amber-900"
+        ? "border-l-4 border-amber-400"
         : "border-l-4 border-blue-500";
 
   const categoryLabel =
@@ -75,7 +75,7 @@ function Tooltip({ holiday, visible, x, y }) {
 
   const tooltipContent = (
     <div
-      className={`fixed z-[9999] rounded-xl border border-border bg-popover p-3 shadow-xl max-w-[280px] ${colorClass} pointer-events-none animate-fade-scale`}
+      className={`fixed z-[9999] rounded-xl border border-border bg-popover ${darkMode ? "bg-gray-500" : "bg-muted"} p-3 shadow-xl max-w-[280px] ${colorClass} pointer-events-none animate-fade-scale`}
       style={{
         left: `${left}px`,
         top: `${top}px`,
@@ -84,7 +84,9 @@ function Tooltip({ holiday, visible, x, y }) {
       <div className="text-sm font-semibold text-popover-foreground mb-1">
         {holiday.name}
       </div>
-      <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
+      <div
+        className={`text-xs ${darkMode ? `text-white` : `text-black`} mb-2 line-clamp-2`}
+      >
         {holiday.description}
       </div>
       <div className="flex items-center gap-1.5">
@@ -97,7 +99,9 @@ function Tooltip({ holiday, visible, x, y }) {
                 : "bg-blue-500"
           }`}
         />
-        <span className="text-xs text-muted-foreground">{categoryLabel}</span>
+        <span className={`text-xs ${darkMode ? `text-white` : `text-black`}`}>
+          <b>{categoryLabel}</b>
+        </span>
       </div>
     </div>
   );
@@ -112,6 +116,7 @@ export default function CalendarMonth({
   selectedCategory,
   currentDate,
   viewMode = "mini",
+  darkMode,
 }) {
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -283,6 +288,7 @@ export default function CalendarMonth({
           visible={tooltip.visible}
           x={tooltip.x}
           y={tooltip.y}
+          darkMode={darkMode}
         />
 
         <div className="rounded-2xl border-2 border-border bg-card shadow-lg p-6">
@@ -338,6 +344,7 @@ export default function CalendarMonth({
                 isPast,
                 isHoliday,
                 dayOfWeek,
+                darkMode,
               );
 
               return (
@@ -410,6 +417,7 @@ export default function CalendarMonth({
         visible={tooltip.visible}
         x={tooltip.x}
         y={tooltip.y}
+        darkMode={darkMode}
       />
 
       <div className="rounded-xl border-2 border-border bg-card p-3 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5">
@@ -460,6 +468,7 @@ export default function CalendarMonth({
               isPast,
               isHoliday,
               dayOfWeek,
+              darkMode,
             );
 
             return (

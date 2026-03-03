@@ -350,6 +350,7 @@ export default function CalendarView({
                   date: currentDate,
                 }}
                 viewMode="mini"
+                darkMode={darkMode}
               />
             ))}
           </div>
@@ -369,6 +370,7 @@ export default function CalendarView({
                 date: currentDate,
               }}
               viewMode="full"
+              darkMode={darkMode}
             />
           </div>
         )}

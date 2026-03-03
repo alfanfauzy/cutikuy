@@ -24,7 +24,7 @@ const MONTHS_ID = [
 ];
 
 // Animated Filter Button Component
-function FilterButton({ btn, isSelected, onClick }) {
+function FilterButton({ btn, isSelected, onClick, darkMode }) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleClick = () => {
@@ -45,7 +45,7 @@ function FilterButton({ btn, isSelected, onClick }) {
         ${
           isSelected
             ? `${btn.bg} ${btn.text} ${btn.border} shadow-md scale-105`
-            : "bg-muted text-muted-foreground border-transparent hover:border-border hover:bg-muted/80 hover:scale-[1.02]"
+            : `bg-muted ${darkMode ? `text-white` : `text-black`} border-transparent hover:border-border hover:bg-muted/80 hover:scale-[1.02]`
         }
         ${isAnimating ? "btn-active-pulse" : ""}
       `}
@@ -129,6 +129,7 @@ export default function CalendarView({
   holidays,
   calendarOnlyMode = false,
   toggleCalendarFullscreen,
+  darkMode,
 }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState("year");
@@ -249,6 +250,7 @@ export default function CalendarView({
                 btn={btn}
                 isSelected={selectedCategory === btn.id}
                 onClick={() => setSelectedCategory(btn.id)}
+                darkMode={darkMode}
               />
             ))}
           </div>
@@ -306,19 +308,27 @@ export default function CalendarView({
       <div className="flex flex-wrap justify-center gap-6 text-sm animate-fade-scale">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
-          <span className="text-muted-foreground font-medium">
+          <span
+            className={`${darkMode ? "text-white" : "text-black"} font-medium `}
+          >
             Libur Nasional
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></span>
-          <span className="text-muted-foreground font-medium">
+          <span
+            className={`${darkMode ? "text-white" : "text-black"} font-medium `}
+          >
             Cuti Bersama
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-sm bg-blue-500/30 border-2 border-blue-500"></span>
-          <span className="text-muted-foreground font-medium">Hari Ini</span>
+          <span
+            className={`${darkMode ? "text-white" : "text-black"} font-medium `}
+          >
+            Hari Ini
+          </span>
         </div>
       </div>
 

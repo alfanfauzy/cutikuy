@@ -1,107 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   /* ========================================
-     LIGHT MODE - Bold, Vibrant, High Impact
+     LIGHT MODE - Warm paper + deep charcoal,
+     high-contrast layers
      ======================================== */
   :root {
-    /* Base Colors - Slightly warm background */
-    --background: 40 25% 96%;
-    --foreground: 222 47% 5%;
-    
-    /* Surface Colors - Bright white for cards */
+    /* Base - warm paper background, near-black text */
+    --background: 45 30% 94%;
+    --foreground: 225 35% 7%;
+
+    /* Surfaces - pure white cards, clearly above background */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 5%;
+    --card-foreground: 225 35% 7%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 5%;
-    
-    /* Primary - Bold Indigo */
-    --primary: 239 85% 50%;
+    --popover-foreground: 225 35% 7%;
+
+    /* Primary - deep, saturated indigo */
+    --primary: 243 75% 45%;
     --primary-foreground: 0 0% 100%;
-    
-    /* Secondary - Stronger slate */
-    --secondary: 215 28% 45%;
-    --secondary-foreground: 0 0% 100%;
-    
-    /* Muted - Warmer, more visible gray */
-    --muted: 40 20% 90%;
-    --muted-foreground: 215 20% 35%;
-    
-    /* Accent - Bold Amber/Orange */
-    --accent: 28 100% 45%;
-    --accent-foreground: 0 0% 100%;
-    
-    /* Destructive - Bold Red */
-    --destructive: 0 85% 50%;
+
+    /* Secondary - defined slate surface */
+    --secondary: 215 30% 88%;
+    --secondary-foreground: 225 35% 10%;
+
+    /* Muted - visible warm gray, darker text */
+    --muted: 45 20% 88%;
+    --muted-foreground: 220 25% 30%;
+
+    /* Accent - bold amber for cuti bersama */
+    --accent: 38 95% 45%;
+    --accent-foreground: 38 95% 8%;
+
+    /* Destructive */
+    --destructive: 0 74% 45%;
     --destructive-foreground: 0 0% 100%;
-    
-    /* Borders - More defined */
-    --border: 215 25% 80%;
-    --input: 215 25% 80%;
-    --ring: 239 85% 50%;
-    
+
+    /* Borders - strong, clearly defined */
+    --border: 220 20% 74%;
+    --input: 220 20% 74%;
+    --ring: 243 75% 45%;
+
     /* Radius */
     --radius: 0.75rem;
-    
-    /* Holiday-specific semantic colors - Bold */
-    --holiday-public: 0 85% 50%;
-    --holiday-joint: 28 100% 45%;
-    --holiday-school: 217 90% 50%;
-    --weekend-sat: 217 90% 48%;
-    --weekend-sun: 0 85% 50%;
-    --today: 217 90% 50%;
+
+    /* Holiday semantics - deep, saturated for light bg */
+    --holiday-public: 0 80% 45%;
+    --holiday-joint: 38 95% 45%;
+    --holiday-school: 217 90% 42%;
+    --weekend-sat: 217 85% 40%;
+    --weekend-sun: 0 80% 42%;
   }
 
   /* ========================================
-     DARK MODE - Deep, Elegant, Easy on Eyes
+     DARK MODE - Deep navy, elevated surfaces,
+     bright saturated accents
      ======================================== */
   .dark {
-    /* Base Colors - Deep slate instead of pure black */
-    --background: 222 47% 7%;
-    --foreground: 210 40% 98%;
-    
-    /* Surface Colors - Slightly elevated from background */
-    --card: 222 47% 9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 9%;
-    --popover-foreground: 210 40% 98%;
-    
-    /* Primary - Brighter Indigo for dark mode */
-    --primary: 239 84% 67%;
-    --primary-foreground: 0 0% 100%;
-    
-    /* Secondary - Muted slate */
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    
+    /* Base - deep navy instead of pure black */
+    --background: 225 40% 6%;
+    --foreground: 212 35% 96%;
+
+    /* Surfaces - stepped elevates above background */
+    --card: 225 35% 10%;
+    --card-foreground: 212 35% 96%;
+    --popover: 225 35% 13%;
+    --popover-foreground: 212 35% 96%;
+
+    /* Primary - bright indigo, dark text on it */
+    --primary: 239 95% 68%;
+    --primary-foreground: 240 60% 8%;
+
+    /* Secondary - clearly lifted surface */
+    --secondary: 217 30% 20%;
+    --secondary-foreground: 210 30% 90%;
+
     /* Muted */
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 55%;
-    
-    /* Accent - Amber for dark mode (glows nicely) */
-    --accent: 38 92% 50%;
-    --accent-foreground: 0 0% 100%;
-    
+    --muted: 217 28% 18%;
+    --muted-foreground: 215 25% 68%;
+
+    /* Accent - luminous amber */
+    --accent: 42 95% 56%;
+    --accent-foreground: 38 95% 8%;
+
     /* Destructive */
-    --destructive: 0 62% 30%;
+    --destructive: 0 68% 55%;
     --destructive-foreground: 0 0% 100%;
-    
-    /* Borders - Subtle but visible */
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 239 84% 67%;
-    
-    /* Holiday colors - adjusted for dark mode visibility */
-    --holiday-public: 0 84% 60%;
-    --holiday-joint: 38 92% 50%;
-    --holiday-school: 217 91% 60%;
-    --weekend-sat: 217 91% 60%;
-    --weekend-sun: 0 84% 60%;
-    --today: 217 91% 60%;
+
+    /* Borders - strong against dark surfaces */
+    --border: 217 30% 26%;
+    --input: 217 30% 26%;
+    --ring: 239 95% 68%;
+
+    /* Holiday semantics - luminous for dark bg */
+    --holiday-public: 0 75% 62%;
+    --holiday-joint: 42 95% 56%;
+    --holiday-school: 217 95% 66%;
+    --weekend-sat: 217 95% 66%;
+    --weekend-sun: 0 75% 62%;
   }
 }
 
@@ -112,43 +110,17 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
-  
-  /* Smooth theme transitions - Applied to all color properties */
-  *,
-  *::before,
-  *::after {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-  }
-  
-  /* Extended transition during theme switch - applied to html element */
-  html.theme-transitioning,
-  html.theme-transitioning *,
-  html.theme-transitioning *::before,
-  html.theme-transitioning *::after {
-    transition-duration: 500ms !important;
-  }
-  
-  /* Disable transition for performance-critical elements */
-  .no-transition,
-  .no-transition *,
-  .no-transition *::before,
-  .no-transition *::after {
-    transition: none !important;
-  }
-  
-  /* Smooth theme transitions */
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* Selection styling */
   ::selection {
     background-color: hsl(var(--primary) / 0.3);
     color: hsl(var(--primary));
   }
-  
+
   .dark ::selection {
     background-color: hsl(var(--primary) / 0.4);
     color: hsl(var(--primary-foreground));
@@ -156,56 +128,17 @@
 }
 
 @layer utilities {
-  /* ========================================
-     Filter Button Animations
-     ======================================== */
-  
-  /* Scale animation for filter buttons */
-  .btn-animate {
-    position: relative;
-    overflow: hidden;
+  /* Hide scrollbars for horizontal month selector */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
-  .btn-animate::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s ease;
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
-  
-  .btn-animate:hover::before {
-    transform: translateX(100%);
-  }
-  
-  /* Active state pulse animation */
-  @keyframes btn-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-  }
-  
-  .btn-active-pulse {
-    animation: btn-pulse 0.3s ease-in-out;
-  }
-  
-  /* Slide in animation for content */
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-slide-up {
-    animation: slide-up 0.4s ease-out forwards;
-  }
-  
-  /* Fade scale animation */
+
+  /* Fade scale animation for tooltips */
   @keyframes fade-scale {
     from {
       opacity: 0;
@@ -216,34 +149,23 @@
       transform: scale(1);
     }
   }
-  
+
   .animate-fade-scale {
-    animation: fade-scale 0.3s ease-out forwards;
+    animation: fade-scale 0.15s ease-out forwards;
   }
-  
-  /* Count badge bounce animation */
-  @keyframes badge-bounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  
-  .animate-badge {
-    animation: badge-bounce 0.3s ease-in-out;
-  }
-  
-  /* Dot indicator animation */
-  @keyframes dot-ping {
-    0% { transform: scale(1); opacity: 1; }
-    75% { transform: scale(2); opacity: 0; }
-    100% { transform: scale(1); opacity: 0; }
-  }
-  
-  .dot-ping::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: inherit;
-    animation: dot-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

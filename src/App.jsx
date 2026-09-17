@@ -2,8 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "./components/Header";
 import CalendarView from "./components/CalendarView";
 import Footer from "./components/Footer";
-import { holidays, categories, states } from "./data/holidays";
-import "./App.css";
+import { holidays } from "./data/holidays";
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -15,15 +14,11 @@ function App() {
     return true;
   });
 
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
   const calendarContainerRef = useRef(null);
 
   const toggleDarkMode = useCallback(() => {
-    setIsTransitioning(true);
     setDarkMode((prev) => !prev);
-    // Reset transitioning state after animation completes
-    setTimeout(() => setIsTransitioning(false), 500);
   }, []);
 
   useEffect(() => {
@@ -84,9 +79,9 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen bg-background transition-colors duration-500 ease-in-out ${
+      className={`min-h-screen bg-background transition-colors duration-300 ease-in-out ${
         darkMode ? "dark" : ""
-      } ${isTransitioning ? "theme-transitioning" : ""}`}
+      }`}
     >
       {!calendarOnlyMode && (
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
@@ -96,20 +91,13 @@ function App() {
         <section
           id="holidays"
           ref={calendarContainerRef}
-          className={`${calendarOnlyMode ? "h-screen overflow-auto p-4" : "py-8"}`}
+          className={`bg-background ${
+            calendarOnlyMode ? "h-screen overflow-auto py-8" : "py-8"
+          }`}
         >
-          <div
-            className={`${
-              calendarOnlyMode
-                ? "h-full max-w-full"
-                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-            }`}
-          >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CalendarView
               holidays={holidays}
-              categories={categories}
-              states={states}
-              darkMode={darkMode}
               calendarOnlyMode={calendarOnlyMode}
               toggleCalendarFullscreen={toggleCalendarFullscreen}
             />
@@ -117,7 +105,7 @@ function App() {
         </section>
       </main>
 
-      {!calendarOnlyMode && <Footer darkMode={darkMode} />}
+      {!calendarOnlyMode && <Footer />}
     </div>
   );
 }

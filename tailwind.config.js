@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Doto", "sans-serif"],
+        sans: ['"Plus Jakarta Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
+        brand: ["Doto", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -46,6 +47,10 @@ export default {
           public: "hsl(var(--holiday-public))",
           joint: "hsl(var(--holiday-joint))",
           school: "hsl(var(--holiday-school))",
+        },
+        weekend: {
+          sat: "hsl(var(--weekend-sat))",
+          sun: "hsl(var(--weekend-sun))",
         },
       },
       borderRadius: {

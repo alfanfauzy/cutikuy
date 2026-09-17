@@ -1,4 +1,4 @@
-// Calendar Month Component with Modern Theme
+// Calendar Month Component
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -27,25 +27,39 @@ const MONTHS_ID = [
   "Desember",
 ];
 
+const CATEGORY_META = {
+  public: {
+    label: "Libur Nasional",
+    dot: "bg-holiday-public",
+    bar: "border-holiday-public",
+    text: "text-holiday-public",
+    chip: "bg-holiday-public/15 text-holiday-public",
+    wash: "bg-holiday-public/5 dark:bg-holiday-public/10",
+  },
+  joint: {
+    label: "Cuti Bersama",
+    dot: "bg-holiday-joint",
+    bar: "border-holiday-joint",
+    text: "text-holiday-joint",
+    chip: "bg-holiday-joint/15 text-holiday-joint",
+    wash: "bg-holiday-joint/5 dark:bg-holiday-joint/10",
+  },
+  school: {
+    label: "Libur Sekolah",
+    dot: "bg-holiday-school",
+    bar: "border-holiday-school",
+    text: "text-holiday-school",
+    chip: "bg-holiday-school/15 text-holiday-school",
+    wash: "bg-holiday-school/5 dark:bg-holiday-school/10",
+  },
+};
+
 // Tooltip Component with Portal for correct positioning
-function Tooltip({ holiday, visible, x, y, darkMode }) {
+function Tooltip({ holiday, visible, x, y }) {
   if (!visible || !holiday) return null;
 
-  const colorClass =
-    holiday.category === "public"
-      ? "border-l-4 border-red-500"
-      : holiday.category === "joint"
-        ? "border-l-4 border-amber-400"
-        : "border-l-4 border-blue-500";
+  const meta = CATEGORY_META[holiday.category] || CATEGORY_META.school;
 
-  const categoryLabel =
-    holiday.category === "public"
-      ? "Libur Nasional"
-      : holiday.category === "joint"
-        ? "Cuti Bersama"
-        : "Libur Sekolah";
-
-  // Calculate position to keep tooltip on screen
   const tooltipWidth = 280;
   const tooltipHeight = 100;
   const padding = 16;
@@ -53,55 +67,41 @@ function Tooltip({ holiday, visible, x, y, darkMode }) {
   let left = x + 12;
   let top = y + 12;
 
-  // Prevent going off right edge
   if (left + tooltipWidth > window.innerWidth - padding) {
     left = x - tooltipWidth - 12;
   }
 
-  // Prevent going off bottom edge
   if (top + tooltipHeight > window.innerHeight - padding) {
     top = y - tooltipHeight - 12;
   }
 
-  // Prevent going off left edge
   if (left < padding) {
     left = padding;
   }
 
-  // Prevent going off top edge
   if (top < padding) {
     top = padding;
   }
 
   const tooltipContent = (
     <div
-      className={`fixed z-[9999] rounded-xl border border-border bg-popover ${darkMode ? "bg-gray-500" : "bg-muted"} p-3 shadow-xl max-w-[280px] ${colorClass} pointer-events-none animate-fade-scale`}
+      role="tooltip"
+      className={`fixed z-[9999] rounded-xl border border-border bg-popover text-popover-foreground p-3 shadow-xl max-w-[280px] border-l-4 ${meta.bar} pointer-events-none animate-fade-scale`}
       style={{
         left: `${left}px`,
         top: `${top}px`,
       }}
     >
-      <div className="text-sm font-semibold text-popover-foreground mb-1">
-        {holiday.name}
-      </div>
-      <div
-        className={`text-xs ${darkMode ? `text-white` : `text-black`} mb-2 line-clamp-2`}
-      >
+      <div className="text-sm font-semibold mb-1">{holiday.name}</div>
+      <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
         {holiday.description}
       </div>
       <div className="flex items-center gap-1.5">
         <span
-          className={`w-2 h-2 rounded-full ${
-            holiday.category === "public"
-              ? "bg-red-500"
-              : holiday.category === "joint"
-                ? "bg-amber-500"
-                : "bg-blue-500"
-          }`}
+          className={`w-2 h-2 rounded-full ${meta.dot}`}
+          aria-hidden="true"
         />
-        <span className={`text-xs ${darkMode ? `text-white` : `text-black`}`}>
-          <b>{categoryLabel}</b>
-        </span>
+        <span className="text-xs font-medium">{meta.label}</span>
       </div>
     </div>
   );
@@ -116,7 +116,6 @@ export default function CalendarMonth({
   selectedCategory,
   currentDate,
   viewMode = "mini",
-  darkMode,
 }) {
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -125,7 +124,6 @@ export default function CalendarMonth({
     y: 0,
   });
 
-  // Get holidays for this month
   const monthHolidays = useMemo(() => {
     return holidays.filter((h) => {
       const date = new Date(h.date);
@@ -137,44 +135,23 @@ export default function CalendarMonth({
     });
   }, [holidays, month, year, selectedCategory]);
 
-  const getHolidayForDay = (day) => {
+  const holidayForDay = (day) => {
     return monthHolidays.find((h) => {
       const date = new Date(h.date);
       return date.getDate() === day;
     });
   };
 
-  const getHolidayColors = (day) => {
-    const dayHolidays = monthHolidays.filter((h) => {
-      const date = new Date(h.date);
-      return date.getDate() === day;
-    });
-
-    return dayHolidays.map((h) => {
-      switch (h.category) {
-        case "public":
-          return "bg-red-500";
-        case "joint":
-          return "bg-amber-500";
-        case "school":
-          return "bg-blue-500";
-        default:
-          return "bg-gray-400";
-      }
-    });
-  };
-  const hasHoliday = (day) => {
-    return monthHolidays.some((h) => {
-      const date = new Date(h.date);
-      return date.getDate() === day;
-    });
-  };
-
-  const getHolidayInfo = (day) => {
-    return monthHolidays.find((h) => {
-      const date = new Date(h.date);
-      return date.getDate() === day;
-    });
+  const holidayColorsForDay = (day) => {
+    return monthHolidays
+      .filter((h) => {
+        const date = new Date(h.date);
+        return date.getDate() === day;
+      })
+      .map((h) => {
+        const meta = CATEGORY_META[h.category];
+        return meta ? meta.dot : "bg-gray-400";
+      });
   };
 
   const isToday = (day) => {
@@ -193,36 +170,23 @@ export default function CalendarMonth({
     return checkDate < today;
   };
 
-  const handleMouseEnter = (day, e) => {
-    const holiday = getHolidayForDay(day);
+  const showTooltip = (day, x, y) => {
+    const holiday = holidayForDay(day);
     if (holiday) {
-      setTooltip({
-        visible: true,
-        holiday,
-        x: e.clientX,
-        y: e.clientY,
-      });
+      setTooltip({ visible: true, holiday, x, y });
     }
   };
 
-  const handleMouseMove = (e) => {
-    if (tooltip.visible) {
-      setTooltip((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
-    }
-  };
-
-  const handleMouseLeave = () => {
+  const hideTooltip = () => {
     setTooltip({ visible: false, holiday: null, x: 0, y: 0 });
   };
 
-  // Calendar grid calculations
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const daysInPrevMonth = new Date(year, month, 0).getDate();
 
   const generateDays = () => {
     const days = [];
-    // Previous month padding
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
       days.push({
         day: daysInPrevMonth - i,
@@ -230,11 +194,9 @@ export default function CalendarMonth({
         isPadding: true,
       });
     }
-    // Current month days
     for (let i = 1; i <= daysInMonth; i++) {
       days.push({ day: i, isCurrentMonth: true, isPadding: false });
     }
-    // Next month padding
     const remainingCells = 42 - days.length;
     for (let i = 1; i <= remainingCells; i++) {
       days.push({ day: i, isCurrentMonth: false, isPadding: true });
@@ -243,41 +205,68 @@ export default function CalendarMonth({
   };
 
   const days = generateDays();
-  const dayHasHoliday = (day) => hasHoliday(day);
 
-  // Get cell background color
   const getCellBgColor = (item, isCurrentDay, isPast, isHoliday) => {
-    if (isCurrentDay) return "bg-blue-500/10 dark:bg-blue-500/20";
-    if (isHoliday && !isPast) {
-      const holidayInfo = getHolidayInfo(item.day);
-      if (holidayInfo?.category === "public")
-        return "bg-red-500/5 dark:bg-red-500/10";
-      if (holidayInfo?.category === "joint")
-        return "bg-amber-500/5 dark:bg-amber-500/10";
-    }
+    if (isCurrentDay) return "bg-primary/10 dark:bg-primary/20";
     if (isPast) return "bg-muted/30";
+    if (isHoliday) {
+      const holidayInfo = holidayForDay(item.day);
+      if (holidayInfo?.category === "public")
+        return CATEGORY_META.public.wash;
+      if (holidayInfo?.category === "joint")
+        return CATEGORY_META.joint.wash;
+      return "bg-transparent";
+    }
     return "bg-transparent";
   };
 
-  // Get text color - using CSS variables for proper dark mode support
   const getTextColor = (item, isCurrentDay, isPast, isHoliday, dayOfWeek) => {
-    const isSunday = dayOfWeek === 0;
-    const isSaturday = dayOfWeek === 6;
-
     if (!item.isCurrentMonth) return "text-muted-foreground/40";
-    if (isCurrentDay) return "text-blue-600 dark:text-blue-400 font-bold";
+    if (isCurrentDay) return "text-primary font-bold";
     if (isPast) return "text-muted-foreground/60";
-    if (isSunday) return "text-red-500";
-    if (isSaturday) return "text-blue-500";
+    if (dayOfWeek === 0) return "text-weekend-sun";
+    if (dayOfWeek === 6) return "text-weekend-sat";
     if (isHoliday) {
-      const holidayInfo = getHolidayInfo(item.day);
+      const holidayInfo = holidayForDay(item.day);
       if (holidayInfo?.category === "public")
-        return "text-red-600 dark:text-red-400 font-medium";
+        return `${CATEGORY_META.public.text} font-medium`;
       if (holidayInfo?.category === "joint")
-        return "text-amber-600 dark:text-amber-400 font-medium";
+        return `${CATEGORY_META.joint.text} font-medium`;
     }
     return "text-foreground";
   };
+
+  const dayCellHandlers = (item, isHoliday) =>
+    isHoliday
+      ? {
+          tabIndex: 0,
+          role: "button",
+          "aria-label": holidayForDay(item.day)?.name,
+          onMouseEnter: (e) => showTooltip(item.day, e.clientX, e.clientY),
+          onMouseMove: (e) =>
+            tooltip.visible &&
+            setTooltip((prev) => ({ ...prev, x: e.clientX, y: e.clientY })),
+          onMouseLeave: hideTooltip,
+          onFocus: (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            showTooltip(item.day, rect.left + rect.width / 2, rect.top);
+          },
+          onBlur: hideTooltip,
+          onClick: (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height;
+            if (
+              tooltip.visible &&
+              tooltip.holiday?.date === holidayForDay(item.day)?.date
+            ) {
+              hideTooltip();
+            } else {
+              showTooltip(item.day, x, y);
+            }
+          },
+        }
+      : {};
 
   // FULL VIEW MODE
   if (viewMode === "full") {
@@ -288,11 +277,9 @@ export default function CalendarMonth({
           visible={tooltip.visible}
           x={tooltip.x}
           y={tooltip.y}
-          darkMode={darkMode}
         />
 
-        <div className="rounded-2xl border-2 border-border bg-card shadow-lg p-6">
-          {/* Month Header */}
+        <div className="rounded-2xl border border-border bg-card shadow-sm p-4 sm:p-6">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-foreground">
               {MONTHS_ID[month]} {year}
@@ -302,16 +289,15 @@ export default function CalendarMonth({
             </p>
           </div>
 
-          {/* Day Headers - using CSS classes for dark mode instead of prop */}
           <div className="grid grid-cols-7 gap-0 mb-2">
             {DAYS_FULL.map((day, idx) => (
               <div
                 key={day}
                 className={`text-center text-sm font-semibold py-2 ${
                   idx === 0
-                    ? "text-red-500"
+                    ? "text-weekend-sun"
                     : idx === 6
-                      ? "text-blue-500"
+                      ? "text-weekend-sat"
                       : "text-foreground"
                 }`}
               >
@@ -320,14 +306,13 @@ export default function CalendarMonth({
             ))}
           </div>
 
-          {/* Calendar Grid */}
           <div className="grid grid-cols-7 border border-border rounded-xl overflow-hidden">
             {days.map((item, idx) => {
               const colors = item.isCurrentMonth
-                ? getHolidayColors(item.day)
+                ? holidayColorsForDay(item.day)
                 : [];
               const hasHolidays = colors.length > 0;
-              const isHoliday = item.isCurrentMonth && dayHasHoliday(item.day);
+              const isHoliday = item.isCurrentMonth && hasHolidays;
               const isCurrentDay = item.isCurrentMonth && isToday(item.day);
               const isPast = item.isCurrentMonth && isPastDate(item.day);
               const dayOfWeek = idx % 7;
@@ -344,41 +329,35 @@ export default function CalendarMonth({
                 isPast,
                 isHoliday,
                 dayOfWeek,
-                darkMode,
               );
 
               return (
                 <div
                   key={idx}
                   className={`
-                    min-h-[100px] p-2 relative border-b border-r border-border
+                    min-h-[100px] p-1.5 sm:p-2 relative border-b border-r border-border
                     ${bgColor}
                     ${item.isPadding ? "bg-muted/20" : ""}
                     ${isHoliday ? "cursor-pointer" : "cursor-default"}
                     hover:bg-muted/50 transition-colors duration-150
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset
                   `}
-                  onMouseEnter={(e) =>
-                    isHoliday && handleMouseEnter(item.day, e)
-                  }
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={handleMouseLeave}
+                  {...dayCellHandlers(item, isHoliday)}
                 >
-                  {/* Day Number */}
                   <span className={`text-sm ${textColor}`}>{item.day}</span>
 
-                  {/* Holiday Dots */}
                   {hasHolidays && (
                     <div className="flex gap-1 mt-1 flex-wrap">
                       {colors.slice(0, 4).map((color, i) => (
                         <span
                           key={i}
                           className={`w-2 h-2 rounded-full ${color}`}
+                          aria-hidden="true"
                         />
                       ))}
                     </div>
                   )}
 
-                  {/* Holiday Names */}
                   {isHoliday && (
                     <div className="mt-1 space-y-0.5">
                       {monthHolidays
@@ -388,11 +367,8 @@ export default function CalendarMonth({
                           <div
                             key={i}
                             className={`text-[10px] truncate px-1.5 py-0.5 rounded ${
-                              h.category === "public"
-                                ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
-                                : h.category === "joint"
-                                  ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
-                                  : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+                              CATEGORY_META[h.category]?.chip ||
+                              CATEGORY_META.school.chip
                             }`}
                           >
                             {h.name}
@@ -417,25 +393,22 @@ export default function CalendarMonth({
         visible={tooltip.visible}
         x={tooltip.x}
         y={tooltip.y}
-        darkMode={darkMode}
       />
 
-      <div className="rounded-xl border-2 border-border bg-card p-3 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5">
-        {/* Month Header */}
-        <h3 className="text-center text-xs font-bold mb-2 uppercase tracking-wide text-foreground">
+      <div className="rounded-xl border border-border bg-card p-3 transition-colors duration-200 hover:bg-muted/40">
+        <h3 className="text-center text-xs font-bold mb-2 text-foreground">
           {MONTHS_ID[month]}
         </h3>
 
-        {/* Day Headers - using CSS classes for dark mode */}
         <div className="grid grid-cols-7 gap-0 mb-1">
           {DAYS.map((day, idx) => (
             <div
               key={day}
-              className={`text-center text-[9px] font-extrabold py-1 ${
+              className={`text-center text-[9px] font-semibold py-1 ${
                 idx === 0
-                  ? "text-red-500"
+                  ? "text-weekend-sun"
                   : idx === 6
-                    ? "text-blue-500"
+                    ? "text-weekend-sat"
                     : "text-muted-foreground"
               }`}
             >
@@ -444,14 +417,13 @@ export default function CalendarMonth({
           ))}
         </div>
 
-        {/* Calendar Grid */}
         <div className="grid grid-cols-7 gap-0">
           {days.map((item, idx) => {
             const colors = item.isCurrentMonth
-              ? getHolidayColors(item.day)
+              ? holidayColorsForDay(item.day)
               : [];
             const hasHolidays = colors.length > 0;
-            const isHoliday = item.isCurrentMonth && dayHasHoliday(item.day);
+            const isHoliday = item.isCurrentMonth && hasHolidays;
             const isCurrentDay = item.isCurrentMonth && isToday(item.day);
             const isPast = item.isCurrentMonth && isPastDate(item.day);
             const dayOfWeek = idx % 7;
@@ -468,7 +440,6 @@ export default function CalendarMonth({
               isPast,
               isHoliday,
               dayOfWeek,
-              darkMode,
             );
 
             return (
@@ -479,25 +450,23 @@ export default function CalendarMonth({
                   ${bgColor}
                   ${isHoliday ? "cursor-pointer" : "cursor-default"}
                   hover:bg-muted/50 transition-colors duration-150
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset
                 `}
-                onMouseEnter={(e) => isHoliday && handleMouseEnter(item.day, e)}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                {...dayCellHandlers(item, isHoliday)}
               >
-                {/* Day Number */}
                 <span
-                  className={`text-[11px] leading-none font-bold ${textColor}`}
+                  className={`text-[11px] leading-none font-semibold ${textColor}`}
                 >
                   {item.day}
                 </span>
 
-                {/* Holiday Dots */}
                 {hasHolidays && (
                   <div className="flex gap-0.5 mt-0.5 flex-wrap justify-center">
                     {colors.slice(0, 3).map((color, i) => (
                       <span
                         key={i}
                         className={`w-1.5 h-1.5 rounded-full ${color}`}
+                        aria-hidden="true"
                       />
                     ))}
                     {colors.length > 3 && (

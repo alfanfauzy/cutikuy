@@ -7,6 +7,7 @@ import {
   Minimize2,
 } from "lucide-react";
 import CalendarMonth from "./CalendarMonth";
+import { computeLeaveSuggestions } from "../lib/suggestions";
 
 const MONTHS_ID = [
   "Januari",
@@ -37,6 +38,7 @@ export default function CalendarView({
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState("year");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [year] = useState(2026);
 
   const today = new Date();
@@ -79,6 +81,13 @@ export default function CalendarView({
       joint: holidays.filter((h) => h.category === "joint").length,
     };
   }, [holidays]);
+
+  const canSuggest = selectedCategory === "all";
+
+  const suggestions = useMemo(() => {
+    if (!canSuggest || !showSuggestions) return [];
+    return computeLeaveSuggestions(holidays);
+  }, [canSuggest, showSuggestions, holidays]);
 
   const filterOptions = [
     {
@@ -223,6 +232,48 @@ export default function CalendarView({
             </div>
           </div>
         )}
+
+        {/* Leave Suggestion Toggle */}
+        <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
+          <button
+            role="switch"
+            aria-checked={canSuggest && showSuggestions}
+            onClick={() => {
+              if (!canSuggest) {
+                setSelectedCategory("all");
+                setShowSuggestions(true);
+              } else {
+                setShowSuggestions((v) => !v);
+              }
+            }}
+            className="flex items-center gap-2.5 text-sm font-semibold text-left cursor-pointer transition-colors duration-200 text-foreground"
+          >
+            <span
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${
+                canSuggest && showSuggestions
+                  ? "bg-suggestion"
+                  : "bg-muted border border-border"
+              }`}
+              aria-hidden="true"
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                  canSuggest && showSuggestions
+                    ? "translate-x-4"
+                    : "translate-x-0.5"
+                }`}
+              />
+            </span>
+            Saran Cuti
+          </button>
+        </div>
+
+        {!canSuggest && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            Tekan toggle untuk memilih filter "Semua" dan melihat saran ambil
+            cuti.
+          </p>
+        )}
       </div>
 
       {/* Legend */}
@@ -248,6 +299,15 @@ export default function CalendarView({
           />
           <span className="text-foreground">Hari Ini</span>
         </div>
+        {suggestions.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span
+              className="w-2.5 h-2.5 rounded-full bg-suggestion"
+              aria-hidden="true"
+            />
+            <span className="text-foreground">Cuti</span>
+          </div>
+        )}
       </div>
 
       {/* Year View */}
@@ -260,6 +320,7 @@ export default function CalendarView({
               month={monthIndex}
               holidays={filteredHolidays}
               selectedCategory={selectedCategory}
+              suggestions={suggestions}
               currentDate={{
                 year: currentYear,
                 month: currentMonth,
@@ -279,6 +340,7 @@ export default function CalendarView({
             month={selectedMonth}
             holidays={filteredHolidays}
             selectedCategory={selectedCategory}
+            suggestions={suggestions}
             currentDate={{
               year: currentYear,
               month: currentMonth,
@@ -326,8 +388,7 @@ export default function CalendarView({
                         const weekday = date.toLocaleDateString("id-ID", {
                           weekday: "long",
                         });
-                        const isPast =
-                          date < new Date().setHours(0, 0, 0, 0);
+                        const isPast = date < new Date().setHours(0, 0, 0, 0);
 
                         const badgeClass =
                           holiday.category === "public"

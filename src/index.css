@@ -52,6 +52,7 @@
     --holiday-school: 217 90% 42%;
     --weekend-sat: 217 85% 40%;
     --weekend-sun: 0 80% 42%;
+    --suggestion: 160 84% 40%;
   }
 
   /* ========================================
@@ -100,6 +101,7 @@
     --holiday-school: 217 95% 66%;
     --weekend-sat: 217 95% 66%;
     --weekend-sun: 0 75% 62%;
+    --suggestion: 160 84% 60%;
   }
 }
 

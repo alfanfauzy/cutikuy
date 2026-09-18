@@ -55,13 +55,14 @@ const CATEGORY_META = {
 };
 
 // Tooltip Component with Portal for correct positioning
-function Tooltip({ holiday, visible, x, y }) {
-  if (!visible || !holiday) return null;
+function Tooltip({ content, visible, x, y }) {
+  if (!visible || !content) return null;
 
-  const meta = CATEGORY_META[holiday.category] || CATEGORY_META.school;
-
+  const isSuggestionTip = content.type === "suggestion";
   const tooltipWidth = 280;
-  const tooltipHeight = 100;
+  const tooltipHeight = isSuggestionTip
+    ? 110 + Math.max(0, content.suggestion.names.length - 1) * 22
+    : 100;
   const padding = 16;
 
   let left = x + 12;
@@ -83,26 +84,68 @@ function Tooltip({ holiday, visible, x, y }) {
     top = padding;
   }
 
+  let inner;
+  if (isSuggestionTip) {
+    const suggestion = content.suggestion;
+    inner = (
+      <>
+        <div className="text-sm font-semibold mb-1">
+          Rekomendasi ambil cuti tahunan
+        </div>
+        <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
+          Ambil cuti pada hari ini untuk menyambung libur terkait:
+        </div>
+        <div className="flex flex-wrap gap-1 mb-2">
+          {suggestion.names.map((name, i) => (
+            <span
+              key={i}
+              className="text-[10px] px-1.5 py-0.5 rounded bg-suggestion/15 text-suggestion"
+            >
+              {name}
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span
+            className="w-2 h-2 rounded-full bg-suggestion"
+            aria-hidden="true"
+          />
+          <span className="text-xs font-medium">Saran ambil cuti</span>
+        </div>
+      </>
+    );
+  } else {
+    const holiday = content.holiday;
+    const meta = CATEGORY_META[holiday.category] || CATEGORY_META.school;
+    inner = (
+      <>
+        <div className="text-sm font-semibold mb-1">{holiday.name}</div>
+        <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
+          {holiday.description}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className={`w-2 h-2 rounded-full ${meta.dot}`} aria-hidden="true" />
+          <span className="text-xs font-medium">{meta.label}</span>
+        </div>
+      </>
+    );
+  }
+
   const tooltipContent = (
     <div
       role="tooltip"
-      className={`fixed z-[9999] rounded-xl border border-border bg-popover text-popover-foreground p-3 shadow-xl max-w-[280px] border-l-4 ${meta.bar} pointer-events-none animate-fade-scale`}
+      className={`fixed z-[9999] rounded-xl border border-border bg-popover text-popover-foreground p-3 shadow-xl max-w-[280px] border-l-4 animate-fade-scale pointer-events-none ${
+        isSuggestionTip
+          ? "border-suggestion"
+          : CATEGORY_META[content.holiday.category]?.bar ||
+            CATEGORY_META.school.bar
+      }`}
       style={{
         left: `${left}px`,
         top: `${top}px`,
       }}
     >
-      <div className="text-sm font-semibold mb-1">{holiday.name}</div>
-      <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
-        {holiday.description}
-      </div>
-      <div className="flex items-center gap-1.5">
-        <span
-          className={`w-2 h-2 rounded-full ${meta.dot}`}
-          aria-hidden="true"
-        />
-        <span className="text-xs font-medium">{meta.label}</span>
-      </div>
+      {inner}
     </div>
   );
 
@@ -114,15 +157,32 @@ export default function CalendarMonth({
   month,
   holidays,
   selectedCategory,
+  suggestions = [],
   currentDate,
   viewMode = "mini",
 }) {
   const [tooltip, setTooltip] = useState({
     visible: false,
-    holiday: null,
+    content: null,
     x: 0,
     y: 0,
   });
+
+  const suggestionByDate = useMemo(() => {
+    const map = {};
+    suggestions.forEach((s) => {
+      map[s.date] = s;
+    });
+    return map;
+  }, [suggestions]);
+
+  const cellISO = (day) =>
+    `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+  const suggestionForDay = (day) => {
+    if (!suggestions.length) return null;
+    return suggestionByDate[cellISO(day)] || null;
+  };
 
   const monthHolidays = useMemo(() => {
     return holidays.filter((h) => {
@@ -173,12 +233,24 @@ export default function CalendarMonth({
   const showTooltip = (day, x, y) => {
     const holiday = holidayForDay(day);
     if (holiday) {
-      setTooltip({ visible: true, holiday, x, y });
+      setTooltip({
+        visible: true,
+        content: { type: "holiday", holiday },
+        x,
+        y,
+      });
+    } else if (suggestionForDay(day)) {
+      setTooltip({
+        visible: true,
+        content: { type: "suggestion", suggestion: suggestionForDay(day) },
+        x,
+        y,
+      });
     }
   };
 
   const hideTooltip = () => {
-    setTooltip({ visible: false, holiday: null, x: 0, y: 0 });
+    setTooltip({ visible: false, content: null, x: 0, y: 0 });
   };
 
   const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -206,15 +278,20 @@ export default function CalendarMonth({
 
   const days = generateDays();
 
-  const getCellBgColor = (item, isCurrentDay, isPast, isHoliday) => {
+  const getCellBgColor = (
+    item,
+    isCurrentDay,
+    isPast,
+    isHoliday,
+    isSuggestion,
+  ) => {
     if (isCurrentDay) return "bg-primary/10 dark:bg-primary/20";
+    if (isSuggestion) return "bg-suggestion/10";
     if (isPast) return "bg-muted/30";
     if (isHoliday) {
       const holidayInfo = holidayForDay(item.day);
-      if (holidayInfo?.category === "public")
-        return CATEGORY_META.public.wash;
-      if (holidayInfo?.category === "joint")
-        return CATEGORY_META.joint.wash;
+      if (holidayInfo?.category === "public") return CATEGORY_META.public.wash;
+      if (holidayInfo?.category === "joint") return CATEGORY_META.joint.wash;
       return "bg-transparent";
     }
     return "bg-transparent";
@@ -236,12 +313,14 @@ export default function CalendarMonth({
     return "text-foreground";
   };
 
-  const dayCellHandlers = (item, isHoliday) =>
-    isHoliday
+  const dayCellHandlers = (item, isHoliday, isSuggestion) =>
+    isHoliday || isSuggestion
       ? {
           tabIndex: 0,
           role: "button",
-          "aria-label": holidayForDay(item.day)?.name,
+          "aria-label": isHoliday
+            ? holidayForDay(item.day)?.name
+            : `Saran ambil cuti: ${suggestionForDay(item.day)?.names.join(", ")}`,
           onMouseEnter: (e) => showTooltip(item.day, e.clientX, e.clientY),
           onMouseMove: (e) =>
             tooltip.visible &&
@@ -256,10 +335,13 @@ export default function CalendarMonth({
             const rect = e.currentTarget.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
             const y = rect.top + rect.height;
-            if (
-              tooltip.visible &&
-              tooltip.holiday?.date === holidayForDay(item.day)?.date
-            ) {
+            const targetDate = isHoliday
+              ? holidayForDay(item.day)?.date
+              : suggestionForDay(item.day)?.date;
+            const openDate =
+              tooltip.content?.holiday?.date ??
+              tooltip.content?.suggestion?.date;
+            if (tooltip.visible && openDate === targetDate) {
               hideTooltip();
             } else {
               showTooltip(item.day, x, y);
@@ -273,7 +355,7 @@ export default function CalendarMonth({
     return (
       <>
         <Tooltip
-          holiday={tooltip.holiday}
+          content={tooltip.content}
           visible={tooltip.visible}
           x={tooltip.x}
           y={tooltip.y}
@@ -315,6 +397,11 @@ export default function CalendarMonth({
               const isHoliday = item.isCurrentMonth && hasHolidays;
               const isCurrentDay = item.isCurrentMonth && isToday(item.day);
               const isPast = item.isCurrentMonth && isPastDate(item.day);
+              const isSuggestion =
+                item.isCurrentMonth &&
+                !isHoliday &&
+                !isCurrentDay &&
+                Boolean(suggestionForDay(item.day));
               const dayOfWeek = idx % 7;
 
               const bgColor = getCellBgColor(
@@ -322,6 +409,7 @@ export default function CalendarMonth({
                 isCurrentDay,
                 isPast,
                 isHoliday,
+                isSuggestion,
               );
               const textColor = getTextColor(
                 item,
@@ -331,20 +419,27 @@ export default function CalendarMonth({
                 dayOfWeek,
               );
 
-              return (
+return (
                 <div
                   key={idx}
                   className={`
                     min-h-[100px] p-1.5 sm:p-2 relative border-b border-r border-border
                     ${bgColor}
                     ${item.isPadding ? "bg-muted/20" : ""}
-                    ${isHoliday ? "cursor-pointer" : "cursor-default"}
+                    ${isHoliday || isSuggestion ? "cursor-pointer" : "cursor-default"}
                     hover:bg-muted/50 transition-colors duration-150
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset
                   `}
-                  {...dayCellHandlers(item, isHoliday)}
+                  {...dayCellHandlers(item, isHoliday, isSuggestion)}
                 >
                   <span className={`text-sm ${textColor}`}>{item.day}</span>
+
+                  {isSuggestion && (
+                    <span
+                      className="mt-1 block h-0.5 w-3 rounded-full bg-suggestion"
+                      aria-hidden="true"
+                    />
+                  )}
 
                   {hasHolidays && (
                     <div className="flex gap-1 mt-1 flex-wrap">
@@ -376,6 +471,14 @@ export default function CalendarMonth({
                         ))}
                     </div>
                   )}
+
+                  {isSuggestion && (
+                    <div className="mt-1">
+                      <span className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-suggestion/15 text-suggestion">
+                        Saran cuti
+                      </span>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -389,7 +492,7 @@ export default function CalendarMonth({
   return (
     <>
       <Tooltip
-        holiday={tooltip.holiday}
+        content={tooltip.content}
         visible={tooltip.visible}
         x={tooltip.x}
         y={tooltip.y}
@@ -426,6 +529,11 @@ export default function CalendarMonth({
             const isHoliday = item.isCurrentMonth && hasHolidays;
             const isCurrentDay = item.isCurrentMonth && isToday(item.day);
             const isPast = item.isCurrentMonth && isPastDate(item.day);
+            const isSuggestion =
+              item.isCurrentMonth &&
+              !isHoliday &&
+              !isCurrentDay &&
+              Boolean(suggestionForDay(item.day));
             const dayOfWeek = idx % 7;
 
             const bgColor = getCellBgColor(
@@ -433,6 +541,7 @@ export default function CalendarMonth({
               isCurrentDay,
               isPast,
               isHoliday,
+              isSuggestion,
             );
             const textColor = getTextColor(
               item,
@@ -442,17 +551,17 @@ export default function CalendarMonth({
               dayOfWeek,
             );
 
-            return (
+return (
               <div
                 key={idx}
                 className={`
                   aspect-square flex flex-col items-center justify-start pt-1 rounded-sm
                   ${bgColor}
-                  ${isHoliday ? "cursor-pointer" : "cursor-default"}
+                  ${isHoliday || isSuggestion ? "cursor-pointer" : "cursor-default"}
                   hover:bg-muted/50 transition-colors duration-150
                   focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset
                 `}
-                {...dayCellHandlers(item, isHoliday)}
+                {...dayCellHandlers(item, isHoliday, isSuggestion)}
               >
                 <span
                   className={`text-[11px] leading-none font-semibold ${textColor}`}
@@ -473,6 +582,13 @@ export default function CalendarMonth({
                       <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
                     )}
                   </div>
+                )}
+
+                {isSuggestion && (
+                  <span
+                    className="mt-0.5 block h-0.5 w-2 rounded-full bg-suggestion"
+                    aria-hidden="true"
+                  />
                 )}
               </div>
             );

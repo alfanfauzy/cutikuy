@@ -52,6 +52,7 @@ export default {
           sat: "hsl(var(--weekend-sat))",
           sun: "hsl(var(--weekend-sun))",
         },
+        suggestion: "hsl(var(--suggestion))",
       },
       borderRadius: {
         lg: "var(--radius)",

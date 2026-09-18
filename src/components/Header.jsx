@@ -14,8 +14,8 @@ export default function Header({ darkMode, toggleDarkMode }) {
               />
               <span className="relative text-2xl font-bold tracking-tight text-foreground font-brand">
                 Cuti Kuy
-                <span className="absolute -top-2 -right-10 rotate-12 text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full shadow-sm">
-                  2026
+                <span className="absolute -top-2 -right-10 rotate-12 px-2 py-0.5 rounded-full text-xs font-bold shadow-sm bg-primary/10 text-primary dark:bg-primary dark:text-primary-foreground">
+                  {new Date().getFullYear()}
                 </span>
               </span>
             </div>

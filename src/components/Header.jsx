@@ -6,12 +6,17 @@ export default function Header({ darkMode, toggleDarkMode }) {
       <nav className="rounded-full border border-border bg-card/80 backdrop-blur-xl backdrop-saturate-150 shadow-sm">
         <div className="max-w-7xl mx-auto px-5 sm:px-6">
           <div className="flex justify-between items-center h-14">
-            <div className="relative inline-flex items-baseline">
-              <span className="text-2xl font-bold tracking-tight text-foreground font-brand">
+            <div className="relative inline-flex items-center gap-2">
+              <img
+                src="/cuti-kuy-logo.png"
+                alt="Logo Cuti Kuy"
+                className="h-9 w-9 rounded-full object-cover ring-1 ring-border"
+              />
+              <span className="relative text-2xl font-bold tracking-tight text-foreground font-brand">
                 Cuti Kuy
-              </span>
-              <span className="absolute -top-2 -right-10 rotate-12 text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full shadow-sm">
-                2026
+                <span className="absolute -top-2 -right-10 rotate-12 text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full shadow-sm">
+                  2026
+                </span>
               </span>
             </div>
 

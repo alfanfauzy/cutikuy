@@ -1,6 +1,12 @@
 import { Moon, Sun, Heart } from "lucide-react";
 
-export default function Header({ darkMode, toggleDarkMode }) {
+export default function Header({
+  darkMode,
+  toggleDarkMode,
+  years,
+  selectedYear,
+  onYearChange,
+}) {
   return (
     <header className="sticky top-4 z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <nav className="rounded-full border border-border bg-card/80 backdrop-blur-xl backdrop-saturate-150 shadow-sm">
@@ -14,13 +20,34 @@ export default function Header({ darkMode, toggleDarkMode }) {
               />
               <span className="relative text-2xl font-bold tracking-tight text-foreground font-brand">
                 Cuti Kuy
-                <span className="absolute -top-2 -right-10 rotate-12 px-2 py-0.5 rounded-full text-xs font-bold shadow-sm bg-primary/10 text-primary dark:bg-primary dark:text-primary-foreground">
+                <span className="absolute -top-2 -right-10 rotate-12 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-primary/10 text-primary dark:bg-primary dark:text-primary-foreground">
                   {new Date().getFullYear()}
                 </span>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
+              <div
+                className="flex rounded-full bg-muted p-1"
+                role="group"
+                aria-label="Pilih tahun"
+              >
+                {years.map((y) => (
+                  <button
+                    key={y}
+                    aria-pressed={selectedYear === y}
+                    onClick={() => onYearChange(y)}
+                    className={`px-3 py-1 rounded-full text-sm font-semibold transition-colors duration-200 ${
+                      selectedYear === y
+                        ? "bg-card text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                    }`}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
+
               <a
                 href="https://trakteer.id/alfan_fauzy/tip"
                 target="_blank"

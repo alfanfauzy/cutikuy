@@ -31,7 +31,9 @@ const VIEW_MODES = [
 ];
 
 export default function CalendarView({
-  holidays,
+  holidaysByYear,
+  allHolidays,
+  selectedYear,
   calendarOnlyMode = false,
   toggleCalendarFullscreen,
 }) {
@@ -39,7 +41,9 @@ export default function CalendarView({
   const [viewMode, setViewMode] = useState("year");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [year] = useState(2026);
+
+  const years = Object.keys(holidaysByYear).map(Number).sort();
+  const holidays = holidaysByYear[selectedYear] ?? holidaysByYear[years[0]];
 
   const today = new Date();
   const currentYear = today.getFullYear();
@@ -86,8 +90,10 @@ export default function CalendarView({
 
   const suggestions = useMemo(() => {
     if (!canSuggest || !showSuggestions) return [];
-    return computeLeaveSuggestions(holidays);
-  }, [canSuggest, showSuggestions, holidays]);
+    return computeLeaveSuggestions(allHolidays).filter((s) =>
+      s.date.startsWith(String(selectedYear)),
+    );
+  }, [canSuggest, showSuggestions, allHolidays, selectedYear]);
 
   const filterOptions = [
     {
@@ -316,7 +322,7 @@ export default function CalendarView({
           {MONTHS_ID.map((_, monthIndex) => (
             <CalendarMonth
               key={monthIndex}
-              year={year}
+              year={selectedYear}
               month={monthIndex}
               holidays={filteredHolidays}
               selectedCategory={selectedCategory}
@@ -336,7 +342,7 @@ export default function CalendarView({
       {viewMode === "month" && (
         <div className="max-w-3xl mx-auto">
           <CalendarMonth
-            year={year}
+            year={selectedYear}
             month={selectedMonth}
             holidays={filteredHolidays}
             selectedCategory={selectedCategory}
@@ -356,7 +362,7 @@ export default function CalendarView({
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <div className="px-6 py-4 border-b bg-muted/50">
             <h3 className="font-semibold text-foreground">
-              Daftar Hari Libur 2026
+              Daftar Hari Libur {selectedYear}
             </h3>
           </div>
 
@@ -376,7 +382,7 @@ export default function CalendarView({
 
                     <div className="px-6 mb-4">
                       <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {MONTHS_ID[parseInt(monthIdx)]} {year}
+                        {MONTHS_ID[parseInt(monthIdx)]} {selectedYear}
                       </h4>
                       <div className="mt-1 h-px w-full bg-border" />
                     </div>

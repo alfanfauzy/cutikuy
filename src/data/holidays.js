@@ -1,7 +1,7 @@
 // Indonesia Public Holidays 2026
 // Source: Based on official Indonesian government holiday calendar (SKB 3 Menteri)
 
-export const holidays = [
+export const holidays2026 = [
   {
     id: 1,
     date: "2026-01-01",
@@ -203,6 +203,224 @@ export const holidays = [
     description: "Christian celebration of Jesus' birth"
   }
 ];
+
+export const holidays2027 = [
+  {
+    id: 1,
+    date: "2027-01-01",
+    name: "Tahun Baru 2027 Masehi",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Tahun Baru 2027 Masehi"
+  },
+  {
+    id: 2,
+    date: "2027-01-05",
+    name: "Isra Mikraj Nabi Muhammad S.A.W. 1448 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Isra Mikraj Nabi Muhammad S.A.W. 1448 Hijriah"
+  },
+  {
+    id: 3,
+    date: "2027-02-06",
+    name: "Tahun Baru Imlek 2578 Kongzili",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Tahun Baru Imlek 2578 Kongzili"
+  },
+  {
+    id: 4,
+    date: "2027-03-08",
+    name: "Hari Suci Nyepi (Tahun Baru Saka 1949)",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Hari Suci Nyepi (Tahun Baru Saka 1949)"
+  },
+  {
+    id: 5,
+    date: "2027-03-10",
+    name: "Idul Fitri 1448 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Idul Fitri 1448 Hijriah (Hari Pertama)"
+  },
+  {
+    id: 6,
+    date: "2027-03-11",
+    name: "Idul Fitri 1448 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Idul Fitri 1448 Hijriah (Hari Kedua)"
+  },
+  {
+    id: 7,
+    date: "2027-03-26",
+    name: "Wafat Yesus Kristus",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Wafat Yesus Kristus"
+  },
+  {
+    id: 8,
+    date: "2027-03-28",
+    name: "Kebangkitan Yesus Kristus (Paskah)",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Kebangkitan Yesus Kristus (Paskah)"
+  },
+  {
+    id: 9,
+    date: "2027-05-01",
+    name: "Hari Buruh Internasional",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Hari Buruh Internasional"
+  },
+  {
+    id: 10,
+    date: "2027-05-06",
+    name: "Kenaikan Yesus Kristus",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Kenaikan Yesus Kristus"
+  },
+  {
+    id: 11,
+    date: "2027-05-17",
+    name: "Idul Adha 1448 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Idul Adha 1448 Hijriah"
+  },
+  {
+    id: 12,
+    date: "2027-05-20",
+    name: "Hari Raya Waisak 2571 BE",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Hari Raya Waisak 2571 BE"
+  },
+  {
+    id: 13,
+    date: "2027-06-01",
+    name: "Hari Lahir Pancasila",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Hari Lahir Pancasila"
+  },
+  {
+    id: 14,
+    date: "2027-06-06",
+    name: "1 Muharam Tahun Baru Islam 1449 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional 1 Muharam Tahun Baru Islam 1449 Hijriah"
+  },
+  {
+    id: 15,
+    date: "2027-08-15",
+    name: "Maulid Nabi Muhammad S.A.W.",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Maulid Nabi Muhammad S.A.W."
+  },
+  {
+    id: 16,
+    date: "2027-08-17",
+    name: "Proklamasi Kemerdekaan",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Proklamasi Kemerdekaan Republik Indonesia"
+  },
+  {
+    id: 17,
+    date: "2027-12-25",
+    name: "Kelahiran Yesus Kristus",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Kelahiran Yesus Kristus (Hari Natal)"
+  },
+  {
+    id: 18,
+    date: "2027-12-26",
+    name: "Isra Mikraj Nabi Muhammad S.A.W. 1449 Hijriah",
+    category: "public",
+    states: ["Nasional"],
+    description: "Hari Libur Nasional Isra Mikraj Nabi Muhammad S.A.W. 1449 Hijriah"
+  },
+  {
+    id: 19,
+    date: "2027-02-05",
+    name: "Cuti Bersama Tahun Baru Imlek 2578 Kongzili",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Tahun Baru Imlek 2578 Kongzili"
+  },
+  {
+    id: 20,
+    date: "2027-03-09",
+    name: "Cuti Bersama Idul Fitri 1448 Hijriah",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Hari Raya Idul Fitri 1448 Hijriah"
+  },
+  {
+    id: 21,
+    date: "2027-03-12",
+    name: "Cuti Bersama Idul Fitri 1448 Hijriah",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Hari Raya Idul Fitri 1448 Hijriah"
+  },
+  {
+    id: 22,
+    date: "2027-03-15",
+    name: "Cuti Bersama Idul Fitri 1448 Hijriah",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Hari Raya Idul Fitri 1448 Hijriah"
+  },
+  {
+    id: 23,
+    date: "2027-03-25",
+    name: "Cuti Bersama Wafat Yesus Kristus",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Wafat Yesus Kristus"
+  },
+  {
+    id: 24,
+    date: "2027-05-18",
+    name: "Cuti Bersama Idul Adha 1448 Hijriah",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Hari Raya Idul Adha 1448 Hijriah"
+  },
+  {
+    id: 25,
+    date: "2027-05-19",
+    name: "Cuti Bersama Hari Raya Waisak 2571 BE",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Hari Raya Waisak 2571 BE"
+  },
+  {
+    id: 26,
+    date: "2027-12-24",
+    name: "Cuti Bersama Kelahiran Yesus Kristus",
+    category: "joint",
+    states: ["Nasional"],
+    description: "Cuti Bersama Kelahiran Yesus Kristus (Hari Natal)"
+  }
+];
+
+export const HOLIDAYS_BY_YEAR = {
+  2026: holidays2026,
+  2027: holidays2027,
+};
+
+export const ALL_HOLIDAYS = [...holidays2026, ...holidays2027];
 
 export const categories = [
   { id: 'all', name: 'Semua Hari Libur', nameEn: 'All Holidays', color: 'blue' },

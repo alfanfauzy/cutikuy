@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "./components/Header";
 import CalendarView from "./components/CalendarView";
 import Footer from "./components/Footer";
-import { holidays } from "./data/holidays";
+import { HOLIDAYS_BY_YEAR, ALL_HOLIDAYS } from "./data/holidays";
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -16,6 +16,12 @@ function App() {
 
   const [calendarOnlyMode, setCalendarOnlyMode] = useState(false);
   const calendarContainerRef = useRef(null);
+
+  const supportedYears = Object.keys(HOLIDAYS_BY_YEAR).map(Number).sort();
+  const [selectedYear, setSelectedYear] = useState(() => {
+    const now = new Date().getFullYear();
+    return supportedYears.includes(now) ? now : supportedYears[0];
+  });
 
   const toggleDarkMode = useCallback(() => {
     setDarkMode((prev) => !prev);
@@ -72,7 +78,13 @@ function App() {
       }`}
     >
       {!calendarOnlyMode && (
-        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <Header
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+          years={supportedYears}
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
+        />
       )}
 
       <main>
@@ -85,7 +97,9 @@ function App() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CalendarView
-              holidays={holidays}
+              holidaysByYear={HOLIDAYS_BY_YEAR}
+              allHolidays={ALL_HOLIDAYS}
+              selectedYear={selectedYear}
               calendarOnlyMode={calendarOnlyMode}
               toggleCalendarFullscreen={toggleCalendarFullscreen}
             />

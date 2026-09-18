@@ -124,7 +124,10 @@ function Tooltip({ content, visible, x, y }) {
           {holiday.description}
         </div>
         <div className="flex items-center gap-1.5">
-          <span className={`w-2 h-2 rounded-full ${meta.dot}`} aria-hidden="true" />
+          <span
+            className={`w-2 h-2 rounded-full ${meta.dot}`}
+            aria-hidden="true"
+          />
           <span className="text-xs font-medium">{meta.label}</span>
         </div>
       </>
@@ -419,7 +422,7 @@ export default function CalendarMonth({
                 dayOfWeek,
               );
 
-return (
+              return (
                 <div
                   key={idx}
                   className={`
@@ -498,7 +501,7 @@ return (
         y={tooltip.y}
       />
 
-      <div className="rounded-xl border border-border bg-card p-3 transition-colors duration-200 hover:bg-muted/40">
+      <div className="rounded-xl border border-border bg-card p-3 transition-colors duration-200">
         <h3 className="text-center text-xs font-bold mb-2 text-foreground">
           {MONTHS_ID[month]}
         </h3>
@@ -551,7 +554,7 @@ return (
               dayOfWeek,
             );
 
-return (
+            return (
               <div
                 key={idx}
                 className={`

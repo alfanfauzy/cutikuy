@@ -9,7 +9,7 @@ function App() {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
       if (saved) return saved === "dark";
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return true;
     }
     return true;
   });
@@ -31,18 +31,6 @@ function App() {
       localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = (e) => {
-      if (!localStorage.getItem("theme")) {
-        setDarkMode(e.matches);
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
 
   const toggleCalendarFullscreen = async () => {
     if (!calendarOnlyMode) {
